@@ -10,6 +10,7 @@
 /*                            DEPENDENSI & IMPOR                              */
 /* -------------------------------------------------------------------------- */
 import React, { createContext, useState, useContext } from 'react';
+import { useToast } from './ToastContext';
 
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
@@ -18,6 +19,7 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]); 
+  const { toast } = useToast();
 
   
   const addToCart = (product, quantity) => {
@@ -30,11 +32,16 @@ export const CartProvider = ({ children }) => {
       }
       return [...prevItems, { ...product, quantity }];
     });
+    toast.success(`Berhasil menambahkan ${product.name} ke keranjang!`);
   };
 
   
   const removeFromCart = (id) => {
+    const itemToRemove = cartItems.find(item => item.id === id);
     setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    if (itemToRemove) {
+      toast.info(`${itemToRemove.name} dihapus dari keranjang.`);
+    }
   };
 
   
@@ -44,7 +51,9 @@ export const CartProvider = ({ children }) => {
   };
 
   
-  const clearCart = () => setCartItems([]);
+  const clearCart = () => {
+    setCartItems([]);
+  };
 
   
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);

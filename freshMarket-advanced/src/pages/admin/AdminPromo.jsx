@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Trash2, X, Ticket, Calendar, Users, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
@@ -11,6 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 // function AdminPromo
 const AdminPromo = () => {
   const { logout } = useAuth();
+  const { toast } = useToast();
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -78,14 +80,15 @@ const AdminPromo = () => {
       const data = await res.json();
       
       if(res.ok) {
+        toast.success("Voucher berhasil dibuat!");
         setIsModalOpen(false);
         setFormData({ code: '', discount_type: 'PERCENT', discount_value: '', min_purchase: '', quota: '', expired_at: '' });
         fetchVouchers();
       } else {
-        alert(data.error);
+        toast.error(data.error || "Gagal membuat voucher");
       }
     } catch (err) { 
-      alert('Terjadi kesalahan jaringan.'); 
+      toast.error('Terjadi kesalahan jaringan.'); 
     }
   };
 
@@ -98,15 +101,20 @@ const AdminPromo = () => {
       confirmType: 'danger',
       onConfirm: async () => {
         try {
-          await fetch(`http://localhost:5000/api/admin/vouchers/${id}`, { 
+          const res = await fetch(`http://localhost:5000/api/admin/vouchers/${id}`, { 
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
           });
-          fetchVouchers();
+          if (res.ok) {
+            toast.success("Voucher berhasil dihapus!");
+            fetchVouchers();
+          } else {
+            toast.error("Gagal menghapus voucher.");
+          }
         } catch (err) {
-          alert('Gagal menghapus voucher.');
+          toast.error('Gagal menghapus voucher.');
         }
         closeConfirm();
       }

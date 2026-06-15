@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Inbox, ChevronRight } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
@@ -12,6 +13,7 @@ import { useAuth } from '../../context/AuthContext';
 // function AdminOrders
 const AdminOrders = () => {
   const { logout } = useAuth();
+  const { toast } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,7 +49,7 @@ const AdminOrders = () => {
 
   const handleUpdateStatus = async (id, nextStatus) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/orders/${id}/status`, {
+      const response = await fetch(`http://localhost:5000/api/admin/orders/${id}/status`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -55,9 +57,14 @@ const AdminOrders = () => {
         },
         body: JSON.stringify({ status: nextStatus })
       });
-      fetchOrders(); 
+      if (response.ok) {
+        toast.success(`Status pesanan berhasil diperbarui menjadi ${nextStatus}`);
+        fetchOrders(); 
+      } else {
+        toast.error("Gagal memperbarui status pesanan");
+      }
     } catch (err) {
-      alert("Gagal update status");
+      toast.error("Gagal update status");
     }
   };
 

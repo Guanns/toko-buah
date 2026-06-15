@@ -3,6 +3,7 @@
 /* -------------------------------------------------------------------------- */
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { Leaf, ArrowLeft, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -21,11 +22,12 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   const { register } = useAuth();
+  const { toast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Password dan Konfirmasi Password tidak cocok!");
+      toast.error("Password dan Konfirmasi Password tidak cocok!");
       return;
     }
     await register(name, email, password);

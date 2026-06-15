@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { Trash2, Plus, Minus, Ticket, X, ShoppingBag, ArrowRight, CheckCircle2, CreditCard, Download } from 'lucide-react';
 import { jsPDF } from 'jspdf';
@@ -16,6 +17,7 @@ const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, clearCart, cartTotal } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [voucherCode, setVoucherCode] = useState('');
   const [activeVouchers, setActiveVouchers] = useState([]);
@@ -83,13 +85,13 @@ const Cart = () => {
       
       if (res.ok) {
         setAppliedVoucher(data.voucher);
-        alert('Voucher berhasil digunakan!');
+        toast.success('Voucher berhasil digunakan!');
       } else {
-        alert(data.message);
+        toast.error(data.message || 'Voucher tidak valid');
         handleRemoveVoucher();
       }
     } catch (err) {
-      alert('Terjadi kesalahan validasi voucher.');
+      toast.error('Terjadi kesalahan validasi voucher.');
     }
   };
 
@@ -99,9 +101,9 @@ const Cart = () => {
   };
 
   const handlePaymentSuccess = async () => {
-    if (!user) return alert("Silakan login terlebih dahulu!");
-    if (!shippingAddress.trim()) return alert("Alamat pengiriman wajib diisi untuk proses kurir!");
-    if (!phoneNumber.trim()) return alert("Nomor telepon kurir wajib diisi!");
+    if (!user) return toast.warning("Silakan login terlebih dahulu!");
+    if (!shippingAddress.trim()) return toast.warning("Alamat pengiriman wajib diisi untuk proses kurir!");
+    if (!phoneNumber.trim()) return toast.warning("Nomor telepon kurir wajib diisi!");
     
     
     const itemsWithShipping = cartItems.map(item => ({
@@ -129,12 +131,13 @@ const Cart = () => {
       if (response.ok) {
         setPaymentSuccess(true);
         clearCart();
+        toast.success("Pesanan berhasil diproses!");
         
       } else {
-        alert("Gagal memproses pesanan.");
+        toast.error("Gagal memproses pesanan.");
       }
     } catch (err) {
-      alert("Terjadi kesalahan jaringan.");
+      toast.error("Terjadi kesalahan jaringan.");
     }
   };
 

@@ -4,6 +4,7 @@
 
 import React, { useState, Suspense, lazy, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ToastProvider } from './context/ToastContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { OrderProvider } from './context/OrderContext'; 
@@ -103,65 +104,67 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <AuthProvider>
-      <CartProvider>
-        <OrderProvider>
-          <Suspense fallback={<LoadingScreen />}>
-            <Routes>
-              
-              
-              <Route element={<UserLayout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={
-                  <div className="pt-20">
-                    <Products searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    <ToastProvider>
+      <AuthProvider>
+        <CartProvider>
+          <OrderProvider>
+            <Suspense fallback={<LoadingScreen />}>
+              <Routes>
+                
+                
+                <Route element={<UserLayout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/products" element={
+                    <div className="pt-20">
+                      <Products searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    </div>
+                  } />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/tracking" element={<Tracking />} />
+                  <Route path="/promo" element={<Promo />} />
+                  <Route path="/profile" element={<Profile />} />
+                </Route>
+                
+                
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+
+                
+                <Route path="/admin/*" element={
+                  <AdminDesktopGuard>
+                    <AdminAuthGuard>
+                      <div className="flex bg-gray-50 min-h-screen font-sans admin-panel">
+                        <Sidebar />
+                        <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
+                          <Routes>
+                            <Route path="/" element={<DashboardAdmin />} />
+                            <Route path="/products" element={<AdminProducts />} />
+                            <Route path="/orders" element={<AdminOrders />} />
+                            <Route path="/promo" element={<AdminPromo />} />
+                            <Route path="/staff" element={<AdminStaff />} /> 
+                            <Route path="/reports" element={<AdminReports />} />
+                          </Routes>
+                        </main>
+                      </div>
+                    </AdminAuthGuard>
+                  </AdminDesktopGuard>
+                } />
+
+                
+                <Route path="*" element={
+                  <div className="min-h-screen flex flex-col items-center justify-center text-center px-6 bg-white font-sans">
+                    <h1 className="text-9xl font-black text-gray-50 absolute -z-10 select-none">404</h1>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Halaman Tidak Ditemukan</h2>
+                    <a href="/" className="mt-8 bg-gray-900 text-white px-8 py-3 rounded-xl font-medium shadow-sm transition-all active:scale-95">Kembali ke Beranda</a>
                   </div>
                 } />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/tracking" element={<Tracking />} />
-                <Route path="/promo" element={<Promo />} />
-                <Route path="/profile" element={<Profile />} />
-              </Route>
-              
-              
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
 
-              
-              <Route path="/admin/*" element={
-                <AdminDesktopGuard>
-                  <AdminAuthGuard>
-                    <div className="flex bg-gray-50 min-h-screen font-sans">
-                      <Sidebar />
-                      <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
-                        <Routes>
-                          <Route path="/" element={<DashboardAdmin />} />
-                          <Route path="/products" element={<AdminProducts />} />
-                          <Route path="/orders" element={<AdminOrders />} />
-                          <Route path="/promo" element={<AdminPromo />} />
-                          <Route path="/staff" element={<AdminStaff />} /> 
-                          <Route path="/reports" element={<AdminReports />} />
-                        </Routes>
-                      </main>
-                    </div>
-                  </AdminAuthGuard>
-                </AdminDesktopGuard>
-              } />
-
-              
-              <Route path="*" element={
-                <div className="min-h-screen flex flex-col items-center justify-center text-center px-6 bg-white font-sans">
-                  <h1 className="text-9xl font-black text-gray-50 absolute -z-10 select-none">404</h1>
-                  <h2 className="text-2xl font-bold text-gray-800 mb-2">Halaman Tidak Ditemukan</h2>
-                  <a href="/" className="mt-8 bg-gray-900 text-white px-8 py-3 rounded-xl font-medium shadow-sm transition-all active:scale-95">Kembali ke Beranda</a>
-                </div>
-              } />
-
-            </Routes>
-          </Suspense>
-        </OrderProvider>
-      </CartProvider>
-    </AuthProvider>
+              </Routes>
+            </Suspense>
+          </OrderProvider>
+        </CartProvider>
+      </AuthProvider>
+    </ToastProvider>
   );
 };
 

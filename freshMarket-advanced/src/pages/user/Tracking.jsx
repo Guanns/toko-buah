@@ -3,6 +3,7 @@
 /* -------------------------------------------------------------------------- */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { Package, Truck, CheckCircle2, ShoppingBag, Clock, ChevronRight, ReceiptText, TrendingUp, Tag, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +13,7 @@ import { Link } from 'react-router-dom';
 // function Tracking
 const Tracking = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [activeTab, setActiveTab] = useState('ALL');
@@ -63,12 +65,13 @@ const Tracking = () => {
         try {
           const res = await fetch(`http://localhost:5000/api/orders/${orderId}/complete`, { method: 'PUT' });
           if (res.ok) {
+            toast.success("Pesanan berhasil diselesaikan! Terima kasih telah berbelanja.");
             fetchUserOrders();
           } else {
-            alert("Gagal menyelesaikan pesanan");
+            toast.error("Gagal menyelesaikan pesanan");
           }
         } catch (err) {
-          alert("Gagal menyelesaikan pesanan");
+          toast.error("Gagal menyelesaikan pesanan");
         }
         closeConfirm();
       }

@@ -1,9 +1,24 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --font-serif: "Geist", sans-serif;
+  --font-headline: "Geist", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .headline {
+  font-family: 'Geist', sans-serif;
+}
+
+label, .label, button, input, select, textarea {
+  font-family: 'Inter', sans-serif;
 }
 
 /* ==========================================================================

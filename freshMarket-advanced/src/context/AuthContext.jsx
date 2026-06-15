@@ -11,6 +11,7 @@
 /* -------------------------------------------------------------------------- */
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from './ToastContext';
 
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
@@ -18,15 +19,9 @@ import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')) || null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const { toast } = useToast();
 
   
   const login = async (email, password) => {
@@ -39,9 +34,15 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setUser(data.user);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        const existingUser = JSON.parse(localStorage.getItem('user')) || {};
+        const mergedUser = {
+          ...data.user,
+          address: data.user.address || existingUser.address || ''
+        };
+        setUser(mergedUser);
+        localStorage.setItem('user', JSON.stringify(mergedUser));
         localStorage.setItem('token', data.token);
+        toast.success(`Selamat datang kembali, ${data.user.name}!`);
 
         if (data.user.role === 'admin' || data.user.role === 'kasir') {
           navigate('/admin');
@@ -49,10 +50,10 @@ export const AuthProvider = ({ children }) => {
           navigate('/');
         }
       } else {
-        alert(`Gagal: ${data.message}`);
+        toast.error(`Gagal: ${data.message}`);
       }
     } catch (error) {
-      alert('Gagal terhubung ke server backend.');
+      toast.error('Gagal terhubung ke server backend.');
     }
   };
 
@@ -68,15 +69,15 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Pendaftaran Berhasil! Silakan Login menggunakan akun baru Anda.');
+        toast.success('Pendaftaran Berhasil! Silakan Login menggunakan akun baru Anda.');
         navigate('/login');
         return true; 
       } else {
-        alert(`Gagal Daftar : ${data.message}`);
+        toast.error(`Gagal Daftar: ${data.message}`);
         return false;
       }
     } catch (error) {
-      alert('Gagal terhubung ke server backend.');
+      toast.error('Gagal terhubung ke server backend.');
       return false;
     }
   };
