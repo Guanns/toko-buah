@@ -1,0 +1,57 @@
+# --------------------------------------------------------------------------
+# KREDENSIAL & DATA SENSITIF (WAJIB DISEMBUNYIKAN)
+# --------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+*.env
+config.json
+jwt_secret.txt
+GEMINI.md
+
+
+# --------------------------------------------------------------------------
+# DEPENDENSI & BUILD OUTPUT
+# --------------------------------------------------------------------------
+node_modules/
+/dist
+/dist-ssr
+/build
+/out
+.npm
+.eslintcache
+
+# --------------------------------------------------------------------------
+# INTEGRASI LOKAL & MEDIA (UNGGAHAN BACKEND)
+# --------------------------------------------------------------------------
+# Mengabaikan folder uploads agar foto produk lokal tidak mengotori GitHub
+backend/uploads/
+uploads/
+*.pdf
+*.zip
+*.rar
+
+# --------------------------------------------------------------------------
+# LOGS & DEBUGGING
+# --------------------------------------------------------------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --------------------------------------------------------------------------
+# KONFIGURASI EDITOR & SISTEM OPERASI
+# --------------------------------------------------------------------------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================================================
+   USER-SIDE DARK MODE STYLING OVERRIDES
+   ========================================================================== */
+.dark {
+  background-color: #030712 !important; /* deep rich gray-950 */
+  color: #f3f4f6 !important;
+}
+
+/* Base sections and cards */
+.dark .min-h-screen {
+  background-color: #030712 !important;
+}
+
+.dark .bg-white,
+.dark .bg-slate-50,
+.dark .bg-gray-50,
+.dark .bg-slate-50\/30,
+.dark .bg-slate-50\/40 {
+  background-color: #0b0f19 !important; /* sleek glowing slate-900 / gray-900 */
+}
+
+/* Slightly lighter gray for active panels/dialogs */
+.dark .bg-gray-100\/30,
+.dark .bg-gray-100\/60,
+.dark .bg-slate-50\/50,
+.dark .bg-gray-50\/20,
+.dark .hover\:bg-gray-50\/20:hover {
+  background-color: #111827 !important;
+}
+
+.dark .bg-white\/95 {
+  background-color: rgba(11, 15, 25, 0.95) !important;
+}
+
+/* Text color overrides */
+.dark .text-slate-900,
+.dark .text-gray-900,
+.dark .text-slate-800,
+.dark .text-gray-800,
+.dark .text-slate-850,
+.dark .text-gray-850 {
+  color: #ffffff !important;
+}
+
+.dark .text-slate-700,
+.dark .text-gray-700,
+.dark .text-slate-650,
+.dark .text-gray-650 {
+  color: #e5e7eb !important; /* gray-200 */
+}
+
+.dark .text-slate-600,
+.dark .text-gray-600 {
+  color: #d1d5db !important; /* gray-300 */
+}
+
+.dark .text-slate-550,
+.dark .text-gray-500,
+.dark .text-slate-500 {
+  color: #9ca3af !important; /* gray-400 */
+}
+
+.dark .text-slate-400,
+.dark .text-gray-400,
+.dark .text-slate-450 {
+  color: #6b7280 !important; /* gray-500 */
+}
+
+/* Input boxes & settings fields */
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark select,
+.dark textarea {
+  background-color: #111827 !important;
+  border-color: #1f2937 !important;
+  color: #ffffff !important;
+}
+
+.dark input::placeholder {
+  color: #6b7280 !important;
+}
+
+/* Borders & separators */
+.dark .border,
+.dark .border-gray-100,
+.dark .border-gray-200,
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-100\/50,
+.dark .border-gray-100\/60,
+.dark .border-slate-200\/60 {
+  border-color: #1f2937 !important; /* gray-800 */
+}
+
+.dark .divide-gray-100 > * + * ,
+.dark .divide-gray-200 > * + * {
+  border-color: #1f2937 !important;
+}
+
+/* Buttons and Lists hover states */
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-slate-50:hover {
+  background-color: #111827 !important;
+}
+
+.dark .hover\:text-green-600:hover,
+.dark .hover\:text-emerald-600:hover {
+  color: #10b981 !important; /* vibrant emerald */
+}
+
+/* Glow effects / Lebih bercahaya */
+.dark .shadow-sm,
+.dark .shadow-md,
+.dark .shadow-lg,
+.dark .shadow-2xl {
+  box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.1), 0 2px 8px -1px rgba(16, 185, 129, 0.05) !important;
+}
+
+.dark .hover\:shadow-xl:hover {
+  box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.25), 0 1px 15px -3px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Active green badges/indicators */
+.dark .bg-emerald-50,
+.dark .bg-green-50 {
+  background-color: rgba(6, 78, 59, 0.4) !important;
+  color: #34d399 !important;
+}
+
+.dark .text-emerald-650,
+.dark .text-green-655,
+.dark .text-emerald-600,
+.dark .text-green-600,
+.dark .text-green-700 {
+  color: #34d399 !important;
+}
+
+.dark .border-green-200,
+.dark .border-green-100,
+.dark .border-green-100\/50 {
+  border-color: rgba(6, 78, 59, 0.6) !important;
+}
