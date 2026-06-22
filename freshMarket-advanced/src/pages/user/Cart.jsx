@@ -181,8 +181,7 @@ const Cart = () => {
     const now = new Date();
     doc.text(now.toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' }), pageW - margin, 24.5, { align: 'right' });
 
- 
-/* use midtrans / xendit */
+ /* xendit */
     const methodLabel = paymentMethod === 'qris' ? 'QRIS Instan' : paymentMethod === 'bca' ? 'BCA Virtual Account' : 'Mandiri Virtual Account';
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7);
