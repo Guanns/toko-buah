@@ -27,9 +27,23 @@ const StatusBadge = ({ status }) => {
     qris:           'bg-emerald-50 dark:bg-emerald-950/35 border border-emerald-200 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-405',
     bca:            'bg-blue-50 dark:bg-blue-950/35 border border-blue-200 dark:border-blue-900/40 text-blue-700 dark:text-blue-405',
     mandiri:        'bg-orange-50 dark:bg-orange-950/35 border border-orange-200 dark:border-orange-900/40 text-orange-700 dark:text-orange-405',
+    bni:            'bg-teal-50 dark:bg-teal-950/35 border border-teal-200 dark:border-teal-900/40 text-teal-700 dark:text-teal-405',
+    bri:            'bg-sky-50 dark:bg-sky-950/35 border border-sky-200 dark:border-sky-900/40 text-sky-700 dark:text-sky-405',
+    permata:        'bg-purple-50 dark:bg-purple-950/35 border border-purple-200 dark:border-purple-900/40 text-purple-700 dark:text-purple-405',
+    cimb:           'bg-rose-50 dark:bg-rose-950/35 border border-rose-200 dark:border-rose-900/40 text-rose-700 dark:text-rose-405',
   };
 
-  const displayLabel = status === 'qris' ? 'QRIS Instan' : status === 'bca' ? 'BCA Virtual Account' : status === 'mandiri' ? 'Mandiri VA' : status;
+  const labels = {
+    qris: 'QRIS Instan',
+    bca: 'BCA VA',
+    mandiri: 'Mandiri VA',
+    bni: 'BNI VA',
+    bri: 'BRI VA',
+    permata: 'Permata VA',
+    cimb: 'CIMB VA'
+  };
+
+  const displayLabel = labels[status] || status;
 
   return (
     <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${map[status] || 'bg-slate-100 dark:bg-slate-805 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800'}`}>

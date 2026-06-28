@@ -16,6 +16,7 @@ const AdminPromo = () => {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('active');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -121,9 +122,27 @@ const AdminPromo = () => {
     });
   };
 
-  const filteredVouchers = vouchers.filter(v =>
-    v.code.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const getVoucherStatus = (v) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const expiryDate = v.expired_at ? new Date(v.expired_at) : null;
+    if (expiryDate) {
+      expiryDate.setHours(0, 0, 0, 0);
+    }
+    const isExpired = expiryDate ? expiryDate < today : false;
+    const isOutOfQuota = v.quota !== null && v.quota !== undefined && Number(v.quota) <= 0;
+    return { isExpired, isOutOfQuota, isEnded: isExpired || isOutOfQuota };
+  };
+
+  const allActiveCount = vouchers.filter(v => !getVoucherStatus(v).isEnded).length;
+  const allExpiredCount = vouchers.filter(v => getVoucherStatus(v).isEnded).length;
+
+  const displayedVouchers = vouchers.filter(v => {
+    const matchesSearch = v.code.toLowerCase().includes(searchQuery.toLowerCase());
+    const status = getVoucherStatus(v);
+    const matchesTab = activeTab === 'active' ? !status.isEnded : status.isEnded;
+    return matchesSearch && matchesTab;
+  });
 
   const formatDate = (dateString) => {
     if (!dateString) return '-';
@@ -163,18 +182,65 @@ const AdminPromo = () => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white px-5 py-2 rounded-lg font-medium text-sm transition-all flex justify-center items-center gap-2 active:scale-95 shadow-sm"
+            className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white px-5 py-2 rounded-lg font-medium text-sm transition-all flex justify-center items-center gap-2 active:scale-95 shadow-sm shadow-gray-900/10 cursor-pointer"
           >
             <Plus size={16} /> Buat Voucher
           </button>
         </div>
       </div>
 
-      {filteredVouchers.length === 0 ? (
+      {/* Tab Navigation */}
+      <div className="flex border-b border-gray-200 mb-6 gap-6">
+        <button
+          onClick={() => setActiveTab('active')}
+          className={`pb-3 text-sm font-medium transition-all relative flex items-center gap-2 cursor-pointer focus:outline-none ${
+            activeTab === 'active'
+              ? 'text-emerald-600 font-semibold border-b-2 border-emerald-600 -mb-[2px]'
+              : 'text-gray-500 hover:text-gray-700 border-b-2 border-transparent'
+          }`}
+        >
+          <span>Masih Berlaku</span>
+          <span className={`px-2 py-0.5 text-xs rounded-full font-semibold transition-colors ${
+            activeTab === 'active'
+              ? 'bg-emerald-50 text-emerald-700'
+              : 'bg-gray-100 text-gray-600'
+          }`}>
+            {allActiveCount}
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('expired')}
+          className={`pb-3 text-sm font-medium transition-all relative flex items-center gap-2 cursor-pointer focus:outline-none ${
+            activeTab === 'expired'
+              ? 'text-rose-600 font-semibold border-b-2 border-rose-600 -mb-[2px]'
+              : 'text-gray-500 hover:text-gray-700 border-b-2 border-transparent'
+          }`}
+        >
+          <span>Sudah Expired / Habis</span>
+          <span className={`px-2 py-0.5 text-xs rounded-full font-semibold transition-colors ${
+            activeTab === 'expired'
+              ? 'bg-rose-50 text-rose-700'
+              : 'bg-gray-100 text-gray-600'
+          }`}>
+            {allExpiredCount}
+          </span>
+        </button>
+      </div>
+
+      {displayedVouchers.length === 0 ? (
         <div className="bg-white p-16 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center shadow-sm">
           <Ticket size={40} className="text-gray-300 mb-4" strokeWidth={1.5} />
-          <h3 className="text-base font-medium text-gray-900 mb-1">Tidak ada data voucher</h3>
-          <p className="text-sm text-gray-500">{searchQuery ? 'Pencarian tidak ditemukan.' : 'Silakan buat voucher baru untuk pelanggan Anda.'}</p>
+          <h3 className="text-base font-medium text-gray-900 mb-1">
+            {searchQuery ? 'Pencarian tidak ditemukan' : activeTab === 'active' ? 'Tidak ada voucher aktif' : 'Tidak ada voucher expired'}
+          </h3>
+          <p className="text-sm text-gray-500">
+            {searchQuery
+              ? 'Silakan cari dengan kata kunci lain.'
+              : activeTab === 'active'
+              ? 'Silakan buat voucher baru untuk mulai memberikan promo kepada pelanggan Anda.'
+              : 'Belum ada riwayat voucher yang kedaluwarsa atau habis kuota.'}
+          </p>
         </div>
       ) : (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
@@ -191,26 +257,27 @@ const AdminPromo = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filteredVouchers.map(v => {
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
-                  const expiryDate = v.expired_at ? new Date(v.expired_at) : null;
-                  if (expiryDate) {
-                    expiryDate.setHours(0, 0, 0, 0);
-                  }
-                  const isExpired = expiryDate ? expiryDate < today : false;
-                  const isOutOfQuota = v.quota !== null && v.quota !== undefined && Number(v.quota) <= 0;
-                  const isEnded = isExpired || isOutOfQuota;
+                {displayedVouchers.map(v => {
+                  const status = getVoucherStatus(v);
+                  const isExpired = status.isExpired;
+                  const isOutOfQuota = status.isOutOfQuota;
+                  const isEnded = status.isEnded;
 
                   return (
-                    <tr key={v.id} className={`hover:bg-gray-50/50 transition-colors group ${isEnded ? 'bg-red-50/30' : ''}`}>
+                    <tr key={v.id} className={`hover:bg-gray-50/50 transition-colors group ${isEnded ? 'bg-gray-50/20' : ''}`}>
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
                           <span className={`text-sm font-semibold tracking-wide ${isEnded ? 'text-gray-400 line-through' : 'text-gray-900'}`}>{v.code}</span>
-                          {isEnded && (
-                            <span className="text-xs font-semibold text-red-500 mt-1 flex items-center gap-1 animate-pulse">
-                              <AlertTriangle size={12} className="shrink-0" />
-                              Sudah Habis Waktunya
+                          {isExpired && (
+                            <span className="text-xs font-semibold text-rose-600 mt-1 flex items-center gap-1">
+                              <AlertTriangle size={12} className="shrink-0 text-rose-500" />
+                              Kedaluwarsa
+                            </span>
+                          )}
+                          {isOutOfQuota && !isExpired && (
+                            <span className="text-xs font-semibold text-amber-600 mt-1 flex items-center gap-1">
+                              <AlertTriangle size={12} className="shrink-0 text-amber-500" />
+                              Kuota Habis
                             </span>
                           )}
                         </div>
@@ -225,14 +292,14 @@ const AdminPromo = () => {
                       </td>
 
                       <td className="px-6 py-4">
-                        <div className={`flex items-center gap-1.5 text-sm font-medium ${isOutOfQuota ? 'text-red-550' : 'text-gray-600'}`}>
-                          <Users size={14} className={isOutOfQuota ? 'text-red-400' : 'text-gray-400'} />
+                        <div className={`flex items-center gap-1.5 text-sm font-medium ${isOutOfQuota ? 'text-rose-600' : 'text-gray-600'}`}>
+                          <Users size={14} className={isOutOfQuota ? 'text-rose-400' : 'text-gray-400'} />
                           {v.quota !== null && v.quota !== undefined ? `${v.quota} Tersisa` : 'Tanpa Batas'}
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className={`flex items-center gap-1.5 text-sm font-medium ${isExpired ? 'text-red-550' : 'text-gray-600'}`}>
-                          <Calendar size={14} className={isExpired ? 'text-red-400' : 'text-gray-400'} />
+                        <div className={`flex items-center gap-1.5 text-sm font-medium ${isExpired ? 'text-rose-600' : 'text-gray-600'}`}>
+                          <Calendar size={14} className={isExpired ? 'text-rose-400' : 'text-gray-400'} />
                           {formatDate(v.expired_at)}
                         </div>
                       </td>
@@ -240,7 +307,7 @@ const AdminPromo = () => {
                       <td className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleDelete(v.id)}
-                          className="text-gray-400 hover:text-red-500 transition-colors p-1.5 rounded-md hover:bg-red-50"
+                          className="text-gray-400 hover:text-red-500 transition-colors p-1.5 rounded-md hover:bg-red-50 cursor-pointer"
                           title="Hapus Voucher"
                         >
                           <Trash2 size={16} />
