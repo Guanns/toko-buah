@@ -1,10 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: CartContext.jsx
- * KELOMPOK: Context Provider (Manajemen State)
- * DESKRIPSI: Mengelola state global aplikasi FreshMarket untuk CartContext.
- * ==============================================================================
- */
 
 /* -------------------------------------------------------------------------- */
 /*                            DEPENDENSI & IMPOR                              */
@@ -18,15 +11,14 @@ import { useToast } from './ToastContext';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]); 
+  const [cartItems, setCartItems] = useState([]);
   const { toast } = useToast();
 
-  
   const addToCart = (product, quantity) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
-        return prevItems.map(item => 
+        return prevItems.map(item =>
           item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
@@ -35,7 +27,6 @@ export const CartProvider = ({ children }) => {
     toast.success(`Berhasil menambahkan ${product.name} ke keranjang!`);
   };
 
-  
   const removeFromCart = (id) => {
     const itemToRemove = cartItems.find(item => item.id === id);
     setCartItems(prevItems => prevItems.filter(item => item.id !== id));
@@ -44,18 +35,15 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  
   const updateQuantity = (id, quantity) => {
     if (quantity < 1) return;
     setCartItems(prevItems => prevItems.map(item => item.id === id ? { ...item, quantity } : item));
   };
 
-  
   const clearCart = () => {
     setCartItems([]);
   };
 
-  
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
   const cartTotal = cartItems.reduce((total, item) => {
     const unitPrice = Number(item.priceNumber ?? item.price ?? 0);
@@ -63,8 +51,8 @@ export const CartProvider = ({ children }) => {
   }, 0);
 
   return (
-    <CartContext.Provider value={{ 
-      cartItems, addToCart, removeFromCart, updateQuantity, clearCart, cartCount, cartTotal 
+    <CartContext.Provider value={{
+      cartItems, addToCart, removeFromCart, updateQuantity, clearCart, cartCount, cartTotal
     }}>
       {children}
     </CartContext.Provider>

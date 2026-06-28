@@ -1,10 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: VoucherHome.jsx
- * KELOMPOK: Komponen UI
- * DESKRIPSI: Komponen antarmuka pengguna untuk VoucherHome FreshMarket.
- * ==============================================================================
- */
 
 /* -------------------------------------------------------------------------- */
 /*                            DEPENDENSI & IMPOR                              */
@@ -16,7 +9,7 @@ import { Link } from 'react-router-dom';
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function VoucherHome
+
 const VoucherHome = () => {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +19,7 @@ const VoucherHome = () => {
     fetch('http://localhost:5000/api/vouchers/active')
       .then(res => res.json())
       .then(data => {
-        
+
         setVouchers(Array.isArray(data) ? data.slice(0, 3) : []);
         setLoading(false);
       })
@@ -64,18 +57,17 @@ const VoucherHome = () => {
   }
 
   if (vouchers.length === 0) {
-    return null; 
+    return null;
   }
 
   return (
     <section className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-950/80 transition-colors duration-300 relative overflow-hidden">
-      
+
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-green-400/5 dark:bg-green-500/5 blur-3xl rounded-full pointer-events-none"></div>
       <div className="absolute bottom-0 right-10 w-96 h-96 bg-emerald-400/5 dark:bg-emerald-500/5 blur-3xl rounded-full pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-5 lg:px-6 relative z-1">
-        
-        
+
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
@@ -85,9 +77,9 @@ const VoucherHome = () => {
               Salin kode voucher di bawah ini dan terapkan saat checkout untuk langsung mengaktifkan potongan harga spesial.
             </p>
           </div>
-          
-          <Link 
-            to="/promo" 
+
+          <Link
+            to="/promo"
             className="group inline-flex items-center gap-2 text-sm font-bold text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors py-2"
           >
             Lihat Semua Voucher
@@ -95,23 +87,21 @@ const VoucherHome = () => {
           </Link>
         </div>
 
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {vouchers.map((voucher) => {
             const isPercent = voucher.discount_type === 'PERCENT';
-            const discountLabel = isPercent 
-              ? `${voucher.discount_value}%` 
+            const discountLabel = isPercent
+              ? `${voucher.discount_value}%`
               : `Rp${Number(voucher.discount_value).toLocaleString('id-ID')}`;
 
             return (
-              <div 
+              <div
                 key={voucher.id}
                 className="relative bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:border-green-300 dark:hover:border-green-800/80 transition-all duration-300 flex flex-col justify-between overflow-hidden group min-h-[180px]"
               >
-                
+
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-green-500/10 to-transparent rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
-                
-                
+
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
@@ -126,7 +116,6 @@ const VoucherHome = () => {
                   </div>
                 </div>
 
-                
                 <div className="mt-4 space-y-1.5">
                   <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                     Min. Belanja: <span className="text-gray-800 dark:text-gray-200 font-bold">Rp {Number(voucher.min_purchase).toLocaleString('id-ID')}</span>
@@ -136,7 +125,6 @@ const VoucherHome = () => {
                   </p>
                 </div>
 
-                
                 <div className="mt-6 pt-4 border-t border-gray-50 dark:border-gray-800/60 flex items-center justify-between gap-3">
                   <div className="bg-gray-50 dark:bg-gray-950 px-3 py-2 rounded-xl border border-gray-100/50 dark:border-gray-850">
                     <span className="text-xs font-black text-gray-800 dark:text-gray-200 tracking-wide uppercase select-all">

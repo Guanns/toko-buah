@@ -8,15 +8,15 @@ import { useAuth } from '../../context/AuthContext';
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function AdminStaff
+
 const AdminStaff = () => {
   const { user, logout } = useAuth();
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('add'); 
+  const [modalMode, setModalMode] = useState('add');
   const [toast, setToast] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -86,7 +86,7 @@ const AdminStaff = () => {
     try {
       const res = await fetch(url, {
         method,
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
@@ -115,7 +115,7 @@ const AdminStaff = () => {
       confirmType: 'danger',
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/admin/users/${id}`, { 
+          const res = await fetch(`http://localhost:5000/api/admin/users/${id}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -135,43 +135,40 @@ const AdminStaff = () => {
     });
   };
 
-  const filteredStaff = staffList.filter(staff => 
+  const filteredStaff = staffList.filter(staff =>
     staff.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     staff.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="font-sans text-gray-800">
-      
-      
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
           <h1 className="text-2xl font-black text-gray-900 tracking-tight">Kelola Akun Kasir</h1>
           <p className="text-sm text-gray-500 mt-1 font-medium">Buat dan kelola kredensial login staff kasir toko Anda.</p>
         </div>
-        <button 
-          onClick={() => handleOpenModal('add')} 
+        <button
+          onClick={() => handleOpenModal('add')}
           className="bg-gray-900 hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-md flex items-center gap-2 active:scale-95"
         >
           <UserPlus size={16} /> Daftarkan Kasir Baru
         </button>
       </div>
 
-      
       <div className="bg-white rounded-t-xl border border-gray-200 p-4 flex justify-between items-center shadow-sm">
         <div className="relative w-full md:w-80">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input 
-            type="text" 
-            placeholder="Cari nama atau email kasir..." 
-            value={searchQuery} 
-            onChange={(e) => setSearchQuery(e.target.value)} 
-            className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-sm font-medium transition-all" 
+          <input
+            type="text"
+            placeholder="Cari nama atau email kasir..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-sm font-medium transition-all"
           />
         </div>
       </div>
 
-      
       <div className="bg-white border-x border-b border-gray-200 rounded-b-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto w-full">
           <table className="w-full min-w-200 text-left border-collapse">
@@ -204,16 +201,16 @@ const AdminStaff = () => {
                     </td>
                     <td className="px-5 py-4 text-center">
                       <div className="flex items-center justify-center gap-1">
-                        <button 
-                          onClick={() => handleOpenModal('edit', staff)} 
-                          className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all" 
+                        <button
+                          onClick={() => handleOpenModal('edit', staff)}
+                          className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all"
                           title="Edit Data Staff"
                         >
                           <Edit2 size={16} />
                         </button>
-                        <button 
-                          onClick={() => handleDelete(staff.id)} 
-                          className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all" 
+                        <button
+                          onClick={() => handleDelete(staff.id)}
+                          className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all"
                           title="Hapus / Nonaktifkan Akun"
                         >
                           <Trash2 size={16} />
@@ -228,11 +225,10 @@ const AdminStaff = () => {
         </div>
       </div>
 
-      
       {isModalOpen && (
         <div className="fixed inset-0 z-150 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
           <div className="bg-white w-full max-w-sm rounded-xl shadow-2xl relative animate-in zoom-in-95 duration-200">
-            
+
             <div className="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 rounded-t-xl">
               <h2 className="text-base font-black text-gray-900 tracking-tight">
                 {modalMode === 'add' ? 'Daftarkan Akun Kasir' : 'Perbarui Akun Kasir'}
@@ -241,55 +237,52 @@ const AdminStaff = () => {
                 <X size={18} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="px-5 py-4 space-y-4">
-              
-              
+
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-gray-600 uppercase tracking-wider block">Nama Lengkap Staff</label>
                 <div className="relative flex items-center">
                   <User size={16} className="absolute left-3 text-gray-400" />
-                  <input 
-                    type="text" 
-                    required 
-                    value={formData.name} 
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
-                    className="w-full bg-white border border-gray-200 py-2 pl-9 pr-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-sm font-medium" 
-                    placeholder="Masukan nama lengkap kasir" 
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full bg-white border border-gray-200 py-2 pl-9 pr-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-sm font-medium"
+                    placeholder="Masukan nama lengkap kasir"
                   />
                 </div>
               </div>
 
-              
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-gray-600 uppercase tracking-wider block">Email Login</label>
                 <div className="relative flex items-center">
                   <Mail size={16} className="absolute left-3 text-gray-400" />
-                  <input 
-                    type="email" 
-                    required 
-                    value={formData.email} 
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
-                    className="w-full bg-white border border-gray-200 py-2 pl-9 pr-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-sm font-medium" 
-                    placeholder="kasir@freshmarket.com" 
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full bg-white border border-gray-200 py-2 pl-9 pr-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-sm font-medium"
+                    placeholder="kasir@freshmarket.com"
                   />
                 </div>
               </div>
 
-              
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-gray-600 uppercase tracking-wider block">
                   {modalMode === 'add' ? 'Password Login' : 'Password Baru (Opsional)'}
                 </label>
                 <div className="relative flex items-center">
                   <Lock size={16} className="absolute left-3 text-gray-400" />
-                  <input 
-                    type="text" 
-                    required={modalMode === 'add'} 
-                    value={formData.password} 
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })} 
-                    className="w-full bg-white border border-gray-200 py-2 pl-9 pr-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-sm font-medium" 
-                    placeholder={modalMode === 'add' ? "Masukan kata sandi staff" : "Kosongkan jika tidak diubah"} 
+                  <input
+                    type="text"
+                    required={modalMode === 'add'}
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="w-full bg-white border border-gray-200 py-2 pl-9 pr-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 text-sm font-medium"
+                    placeholder={modalMode === 'add' ? "Masukan kata sandi staff" : "Kosongkan jika tidak diubah"}
                   />
                 </div>
                 {modalMode === 'edit' && (
@@ -297,7 +290,6 @@ const AdminStaff = () => {
                 )}
               </div>
 
-              
               <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 font-bold text-gray-500 hover:bg-gray-100 rounded-lg text-xs">
                   Batal
@@ -312,7 +304,6 @@ const AdminStaff = () => {
         </div>
       )}
 
-      
       {toast && (
         <div className="fixed bottom-6 right-6 z-200 animate-in slide-in-from-right-10 fade-in duration-300">
           <div className={`px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2 font-medium text-white text-xs ${toast.type === 'error' ? 'bg-red-600' : 'bg-gray-900'}`}>
@@ -322,7 +313,6 @@ const AdminStaff = () => {
         </div>
       )}
 
-      
       {confirmModal.isOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-xl border border-slate-100 overflow-hidden p-6 animate-in zoom-in-95 duration-200">
@@ -330,20 +320,20 @@ const AdminStaff = () => {
               <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4 border bg-rose-50 text-rose-550 border-rose-100/50">
                 <AlertTriangle size={24} />
               </div>
-              
+
               <h3 className="text-sm font-semibold text-slate-800 mb-1.5">{confirmModal.title}</h3>
               <p className="text-xs text-slate-505 font-medium leading-relaxed mb-6">
                 {confirmModal.message}
               </p>
-              
+
               <div className="flex gap-3 w-full">
-                <button 
+                <button
                   onClick={closeConfirm}
                   className="flex-1 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 font-semibold text-xs rounded-xl transition-all"
                 >
                   Batal
                 </button>
-                <button 
+                <button
                   onClick={confirmModal.onConfirm}
                   className="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs rounded-xl transition-all shadow-sm shadow-rose-600/10 active:scale-95"
                 >

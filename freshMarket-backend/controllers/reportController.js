@@ -1,12 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: reportController.js
- * KELOMPOK: Controller Laporan & Dashboard
- * DESKRIPSI: Menyediakan metrik performa toko dan ringkasan transaksi untuk
- *            visualisasi dashboard admin maupun penutupan harian kasir.
- * INTEGRASI: Mengambil data dari tabel MySQL orders, order_items, users, dan vouchers.
- * ==============================================================================
- */
 
 const db = require('../config/db');
 const { cleanInput } = require('../middleware/auth');
@@ -14,7 +5,7 @@ const { cleanInput } = require('../middleware/auth');
 /* -------------------------------------------------------------------------- */
 /*                         STATISTIK RINGKASAN ADMIN                          */
 /* -------------------------------------------------------------------------- */
-// function getAdminStats
+
 const getAdminStats = (req, res) => {
     const stats = {};
 
@@ -23,8 +14,8 @@ const getAdminStats = (req, res) => {
     const qTotalOrders = "SELECT COUNT(*) as total FROM orders WHERE status = 'SELESAI'";
     const qTotalUsers = "SELECT COUNT(*) as total FROM users WHERE role = 'user'";
     const qWeeklySales = `
-        SELECT DATE(created_at) as date, SUM(total_amount) as amount 
-        FROM orders 
+        SELECT DATE(created_at) as date, SUM(total_amount) as amount
+        FROM orders
         WHERE status = 'SELESAI' AND created_at >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
         GROUP BY DATE(created_at)
         ORDER BY date ASC
@@ -75,7 +66,7 @@ const getAdminStats = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                         STATISTIK RINGKASAN KASIR                          */
 /* -------------------------------------------------------------------------- */
-// function getKasirStats
+
 const getKasirStats = (req, res) => {
     const stats = {};
 
@@ -83,11 +74,11 @@ const getKasirStats = (req, res) => {
     const qTodayOrders = 'SELECT COUNT(*) as total FROM orders WHERE DATE(created_at) = CURDATE()';
     const qPendingOrders = "SELECT COUNT(*) as total FROM orders WHERE status IN ('MENUNGGU_ADMIN', 'DIPROSES')";
     const qRecentOrders = `
-        SELECT 
-            o.id, 
-            u.name as customer_name, 
-            o.created_at, 
-            o.status, 
+        SELECT
+            o.id,
+            u.name as customer_name,
+            o.created_at,
+            o.status,
             o.total_amount,
             o.shipping_address,
             o.phone_number,
@@ -134,7 +125,7 @@ const getKasirStats = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                        LAPORAN RINGKASAN PENJUALAN                         */
 /* -------------------------------------------------------------------------- */
-// function getSalesSummary
+
 const getSalesSummary = (req, res) => {
     let { startDate, endDate } = req.query;
     startDate = cleanInput(startDate || '');
@@ -177,7 +168,7 @@ const getSalesSummary = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                          LAPORAN PRODUK TERLARIS                           */
 /* -------------------------------------------------------------------------- */
-// function getTopProducts
+
 const getTopProducts = (req, res) => {
     const limit = parseInt(cleanInput(String(req.query.limit || '10'))) || 10;
 
@@ -205,7 +196,7 @@ const getTopProducts = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                       LAPORAN KINERJA VOUCHER PROMO                        */
 /* -------------------------------------------------------------------------- */
-// function getVoucherPerformance
+
 const getVoucherPerformance = (req, res) => {
     const query = `
         SELECT
@@ -235,7 +226,7 @@ const getVoucherPerformance = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                LAPORAN PENUTUPAN HARIAN (CLOSING KASIR)                    */
 /* -------------------------------------------------------------------------- */
-// function getDailyClosing
+
 const getDailyClosing = (req, res) => {
     const qStatus = `
         SELECT
@@ -268,9 +259,9 @@ const getDailyClosing = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                    LAPORAN FREKUENSI METODE PEMBAYARAN                     */
 /* -------------------------------------------------------------------------- */
-// function getPaymentMethods
+
 const getPaymentMethods = (req, res) => {
-    
+
     const query = `
         SELECT
             status                         AS metode_label,
@@ -290,7 +281,7 @@ const getPaymentMethods = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                     LAPORAN PERINGATAN STOK TIPIS                          */
 /* -------------------------------------------------------------------------- */
-// function getLowStock
+
 const getLowStock = (req, res) => {
     db.query(
         "SELECT id, sku, name, category, stock, price FROM products WHERE stock < 10 AND status = 'PUBLISHED' ORDER BY stock ASC",

@@ -1,11 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: staffController.js
- * KELOMPOK: Controller Manajemen Staff
- * DESKRIPSI: Mengelola siklus akun staff kasir, meliputi pendaftaran akun,
- *            pembaruan kata sandi/informasi profil, dan penonaktifan akun.
- * ==============================================================================
- */
 
 const db = require('../config/db');
 const { cleanInput, isValidEmail } = require('../middleware/auth');
@@ -14,7 +6,7 @@ const bcrypt = require('bcrypt');
 /* -------------------------------------------------------------------------- */
 /*                          DAFTAR AKUN STAFF KASIR                           */
 /* -------------------------------------------------------------------------- */
-// function getStaff
+
 const getStaff = (req, res) => {
     db.query("SELECT id, name, email, role, created_at FROM users WHERE role = 'kasir' ORDER BY id DESC", (err, results) => {
         if (err) return res.status(500).json({ error: 'Gagal mengambil data kasir' });
@@ -25,11 +17,7 @@ const getStaff = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                        BUAT AKUN STAFF KASIR BARU                          */
 /* -------------------------------------------------------------------------- */
-/**
- * Rationale: Memverifikasi validitas format email dan kekuatan kata sandi minimal 6 karakter.
- * Password kasir di-hash dengan enkripsi bcrypt sebelum disimpan ke database.
- */
-// function createStaff
+
 const createStaff = async (req, res) => {
     let { name, email, password } = req.body;
     name = cleanInput(name);
@@ -72,7 +60,7 @@ const createStaff = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                          PERBARUI AKUN STAFF KASIR                         */
 /* -------------------------------------------------------------------------- */
-// function updateStaff
+
 const updateStaff = async (req, res) => {
     const { id } = req.params;
     const { name, email, password } = req.body;
@@ -108,7 +96,7 @@ const updateStaff = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                            HAPUS AKUN STAFF KASIR                          */
 /* -------------------------------------------------------------------------- */
-// function deleteStaff
+
 const deleteStaff = (req, res) => {
     db.query("DELETE FROM users WHERE id = ? AND role = 'kasir'", [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: 'Gagal menonaktifkan akun staff kasir' });

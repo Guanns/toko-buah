@@ -1,11 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: db.js
- * KELOMPOK: Konfigurasi
- * DESKRIPSI: Konfigurasi koneksi MySQL menggunakan pool dari modul mysql2.
- * INTEGRASI: Menggunakan variabel lingkungan (.env) untuk kredensial database.
- * ==============================================================================
- */
 
 const mysql = require('mysql2');
 
@@ -13,10 +5,10 @@ const mysql = require('mysql2');
 /*                            KONFIGURASI DATABASE                            */
 /* -------------------------------------------------------------------------- */
 const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASS !== undefined ? process.env.DB_PASS : '',
+    database: process.env.DB_NAME || 'freshmarket_db',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0

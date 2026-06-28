@@ -1,10 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: AuthContext.jsx
- * KELOMPOK: Context Provider (Manajemen State)
- * DESKRIPSI: Mengelola state global aplikasi FreshMarket untuk AuthContext.
- * ==============================================================================
- */
 
 /* -------------------------------------------------------------------------- */
 /*                            DEPENDENSI & IMPOR                              */
@@ -23,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  
   const login = async (email, password) => {
     try {
       const response = await fetch('http://localhost:5000/api/login', {
@@ -57,7 +49,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  
   const register = async (name, email, password) => {
     try {
       const response = await fetch('http://localhost:5000/api/register', {
@@ -65,13 +56,13 @@ export const AuthProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });
-      
+
       const data = await response.json();
 
       if (response.ok) {
         toast.success('Pendaftaran Berhasil! Silakan Login menggunakan akun baru Anda.');
         navigate('/login');
-        return true; 
+        return true;
       } else {
         toast.error(`Gagal Daftar: ${data.message}`);
         return false;
@@ -82,7 +73,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  
   const updateUser = (updatedFields) => {
     const merged = { ...user, ...updatedFields };
     setUser(merged);

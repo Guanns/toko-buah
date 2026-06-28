@@ -7,12 +7,12 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ToastProvider } from './context/ToastContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import { OrderProvider } from './context/OrderContext'; 
+import { OrderProvider } from './context/OrderContext';
 
 import Navbar from './components/shared/Navbar';
 import Sidebar from './components/admin/Sidebar';
 import UserLayout from './layouts/UserLayout';
-import { ShieldAlert } from 'lucide-react'; 
+import { ShieldAlert } from 'lucide-react';
 
 /* -------------------------------------------------------------------------- */
 /*                          UTILITY                                           */
@@ -23,18 +23,18 @@ const Products = lazy(() => import('./components/Products'));
 const Cart = lazy(() => import('./pages/user/Cart'));
 const Tracking = lazy(() => import('./pages/user/Tracking'));
 const Register = lazy(() => import('./pages/auth/Register'));
-const Promo = lazy(() => import('./pages/user/Promo')); 
+const Promo = lazy(() => import('./pages/user/Promo'));
 const Profile = lazy(() => import('./pages/user/Profile'));
 
 const DashboardAdmin = lazy(() => import('./pages/admin/Dashboard'));
 const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'));
 const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'));
 const AdminPromo = lazy(() => import('./pages/admin/AdminPromo'));
-const AdminStaff = lazy(() => import('./pages/admin/AdminStaff')); 
+const AdminStaff = lazy(() => import('./pages/admin/AdminStaff'));
 const AdminReports = lazy(() => import('./pages/admin/AdminReports'));
 
 /* -------------------------------------------------------------------------- */
-// function LoadingScreen
+
 const LoadingScreen = () => (
   <div className="min-h-screen flex items-center justify-center bg-white font-sans">
     <div className="flex flex-col items-center gap-4">
@@ -47,11 +47,7 @@ const LoadingScreen = () => (
 /* -------------------------------------------------------------------------- */
 /*                      PELINDUNG PANEL ADMIN (DESKTOP)                       */
 /* -------------------------------------------------------------------------- */
-/**
- * Rationale: Membatasi akses panel manajemen admin hanya untuk perangkat desktop
- * (lebar layar >= 1024px) guna menjamin fungsionalitas dan kenyamanan operasional.
- */
-// function AdminDesktopGuard
+
 const AdminDesktopGuard = ({ children }) => {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 
@@ -84,7 +80,7 @@ const AdminDesktopGuard = ({ children }) => {
 /* -------------------------------------------------------------------------- */
 /*                      PELINDUNG SESI ADMIN (AUTH)                           */
 /* -------------------------------------------------------------------------- */
-// function AdminAuthGuard
+
 const AdminAuthGuard = ({ children }) => {
   const { user } = useAuth();
 
@@ -99,7 +95,7 @@ const AdminAuthGuard = ({ children }) => {
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function App
+
 const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -110,8 +106,7 @@ const App = () => {
           <OrderProvider>
             <Suspense fallback={<LoadingScreen />}>
               <Routes>
-                
-                
+
                 <Route element={<UserLayout />}>
                   <Route path="/" element={<Home />} />
                   <Route path="/products" element={
@@ -124,12 +119,10 @@ const App = () => {
                   <Route path="/promo" element={<Promo />} />
                   <Route path="/profile" element={<Profile />} />
                 </Route>
-                
-                
+
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 
-                
                 <Route path="/admin/*" element={
                   <AdminDesktopGuard>
                     <AdminAuthGuard>
@@ -141,7 +134,7 @@ const App = () => {
                             <Route path="/products" element={<AdminProducts />} />
                             <Route path="/orders" element={<AdminOrders />} />
                             <Route path="/promo" element={<AdminPromo />} />
-                            <Route path="/staff" element={<AdminStaff />} /> 
+                            <Route path="/staff" element={<AdminStaff />} />
                             <Route path="/reports" element={<AdminReports />} />
                           </Routes>
                         </main>
@@ -150,7 +143,6 @@ const App = () => {
                   </AdminDesktopGuard>
                 } />
 
-                
                 <Route path="*" element={
                   <div className="min-h-screen flex flex-col items-center justify-center text-center px-6 bg-white font-sans">
                     <h1 className="text-9xl font-black text-gray-50 absolute -z-10 select-none">404</h1>

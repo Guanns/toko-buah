@@ -1,11 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: userController.js
- * KELOMPOK: Controller Manajemen Pengguna & Profil
- * DESKRIPSI: Logika bisnis pengelolaan akun pelanggan seperti pengambilan info profil,
- *            pembaruan nama & email, serta pergantian kata sandi aman.
- * ==============================================================================
- */
 
 const bcrypt = require('bcrypt');
 const db = require('../config/db');
@@ -14,7 +6,7 @@ const { cleanInput, isValidEmail } = require('../middleware/auth');
 /* -------------------------------------------------------------------------- */
 /*                               PROFIL PENGGUNA                              */
 /* -------------------------------------------------------------------------- */
-// function getProfile
+
 const getProfile = (req, res) => {
     const requestedId = parseInt(req.params.id);
     if (req.user.role !== 'admin' && req.user.id !== requestedId) {
@@ -30,7 +22,7 @@ const getProfile = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                          MEMPERBARUI PROFIL PENGGUNA                       */
 /* -------------------------------------------------------------------------- */
-// function updateProfile
+
 const updateProfile = (req, res) => {
     if (req.user.role !== 'admin' && req.user.id !== parseInt(req.params.id)) {
         return res.status(403).json({ error: 'Tidak diizinkan memperbarui profil pengguna lain.' });
@@ -56,7 +48,7 @@ const updateProfile = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                        MEMPERBARUI KATA SANDI PENGGUNA                     */
 /* -------------------------------------------------------------------------- */
-// function updatePassword
+
 const updatePassword = async (req, res) => {
     if (req.user.role !== 'admin' && req.user.id !== parseInt(req.params.id)) {
         return res.status(403).json({ error: 'Tidak diizinkan mengubah sandi akun lain.' });

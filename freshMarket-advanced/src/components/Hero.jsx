@@ -1,10 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: Hero.jsx
- * KELOMPOK: Komponen UI
- * DESKRIPSI: Komponen antarmuka pengguna untuk Hero FreshMarket.
- * ==============================================================================
- */
 
 /* -------------------------------------------------------------------------- */
 /*                            DEPENDENSI & IMPOR                              */
@@ -16,7 +9,7 @@ import { Link } from 'react-router-dom';
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function Hero
+
 const Hero = () => {
   const slides = [
     {
@@ -59,11 +52,10 @@ const Hero = () => {
       <div className="absolute top-0 right-0 w-full md:w-1/2 h-full bg-green-50/70 dark:bg-green-950/20 rounded-b-[50px] md:rounded-l-full -z-10 transform md:translate-x-1/4"></div>
 
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
-        
-        
+
         <div className="w-full md:w-1/2 order-1 md:order-2">
           <div className="relative h-[300px] md:h-[500px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl group border-4 border-white">
-            
+
             {slides.map((slide, index) => (
               <div
                 key={slide.id}
@@ -83,13 +75,13 @@ const Hero = () => {
               </div>
             ))}
 
-            <button 
+            <button
               onClick={prevSlide}
               className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <ChevronLeft size={20} className="text-green-600" />
             </button>
-            <button 
+            <button
               onClick={nextSlide}
               className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
             >
@@ -110,7 +102,6 @@ const Hero = () => {
           </div>
         </div>
 
-        
         <div className="w-full md:w-1/2 space-y-6 md:space-y-8 text-center md:text-left order-2 md:order-1">
           <h1 className="text-4xl md:text-7xl font-extrabold leading-tight text-gray-950 dark:text-white">
             Akses Mudah<br />
@@ -123,13 +114,13 @@ const Hero = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
             <Link
-              to="/products" 
+              to="/products"
               className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold transition-all shadow-lg active:scale-95 cursor-pointer"
             >
               Belanja Sekarang <ShoppingBag size={20} />
             </Link>
-            <a 
-              href="#cara-kerja" 
+            <a
+              href="#cara-kerja"
               className="flex items-center justify-center gap-2 group text-green-700 dark:text-green-400 font-semibold px-6 py-4 rounded-full hover:bg-green-50 dark:hover:bg-green-950/30 transition-all cursor-pointer"
             >
               Cara Kerja <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

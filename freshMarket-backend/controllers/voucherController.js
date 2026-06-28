@@ -1,23 +1,15 @@
-/**
- * ==============================================================================
- * MODUL: voucherController.js
- * KELOMPOK: Controller Voucher Diskon
- * DESKRIPSI: Logika bisnis voucher promosi seperti daftar voucher aktif, validasi
- *            persyaratan belanja, dan pembuatan/penghapusan voucher oleh admin.
- * ==============================================================================
- */
 
 const db = require('../config/db');
 
 /* -------------------------------------------------------------------------- */
 /*                            DAFTAR VOUCHER AKTIF                            */
 /* -------------------------------------------------------------------------- */
-// function getActiveVouchers
+
 const getActiveVouchers = (req, res) => {
     const query = `
-        SELECT * FROM vouchers 
-        WHERE is_active = TRUE 
-        AND (quota IS NULL OR quota > 0) 
+        SELECT * FROM vouchers
+        WHERE is_active = TRUE
+        AND (quota IS NULL OR quota > 0)
         AND (expired_at IS NULL OR expired_at >= CURDATE())
     `;
     db.query(query, (err, results) => {
@@ -29,11 +21,7 @@ const getActiveVouchers = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                        VALIDASI PENGGUNAAN VOUCHER                         */
 /* -------------------------------------------------------------------------- */
-/**
- * Rationale: Memverifikasi masa kedaluwarsa voucher, kuota yang tersisa,
- * serta ambang batas minimal belanja pelanggan agar diskon promo sah diaplikasikan.
- */
-// function validateVoucher
+
 const validateVoucher = (req, res) => {
     const { code, cart_total } = req.body;
     db.query('SELECT * FROM vouchers WHERE code = ? AND is_active = TRUE', [code], (err, results) => {
@@ -59,7 +47,7 @@ const validateVoucher = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                       DAFTAR SEMUA VOUCHER (ADMIN)                         */
 /* -------------------------------------------------------------------------- */
-// function getAllVouchers
+
 const getAllVouchers = (req, res) => {
     db.query('SELECT * FROM vouchers ORDER BY created_at DESC', (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -70,7 +58,7 @@ const getAllVouchers = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                         BUAT VOUCHER PROMO BARU                            */
 /* -------------------------------------------------------------------------- */
-// function createVoucher
+
 const createVoucher = (req, res) => {
     const { code, discount_type, discount_value, min_purchase, quota, expired_at } = req.body;
 
@@ -78,7 +66,7 @@ const createVoucher = (req, res) => {
     const finalExpiredAt = (expired_at === '' || expired_at === null || expired_at === undefined) ? null : expired_at;
 
     const query = `
-        INSERT INTO vouchers (code, discount_type, discount_value, min_purchase, quota, expired_at) 
+        INSERT INTO vouchers (code, discount_type, discount_value, min_purchase, quota, expired_at)
         VALUES (?, ?, ?, ?, ?, ?)
     `;
     db.query(
@@ -94,7 +82,7 @@ const createVoucher = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                            HAPUS VOUCHER PROMO                             */
 /* -------------------------------------------------------------------------- */
-// function deleteVoucher
+
 const deleteVoucher = (req, res) => {
     db.query('DELETE FROM vouchers WHERE id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err.message });

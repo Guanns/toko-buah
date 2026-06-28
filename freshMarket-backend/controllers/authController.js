@@ -1,13 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: authController.js
- * KELOMPOK: Controller Autentikasi
- * DESKRIPSI: Menangani logika bisnis autentikasi pengguna, termasuk masuk log (login)
- *            dan pendaftaran akun baru (register).
- * KEAMANAN: Kata sandi dienkripsi menggunakan bcrypt sebelum disimpan ke database,
- *           serta menghasilkan token akses JWT bertanda tangan digital.
- * ==============================================================================
- */
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -17,12 +7,7 @@ const { cleanInput, isValidEmail } = require('../middleware/auth');
 /* -------------------------------------------------------------------------- */
 /*                            LOGIKA MASUK LOG (LOGIN)                        */
 /* -------------------------------------------------------------------------- */
-/**
- * Rationale: Memverifikasi identitas pengguna menggunakan email dan kata sandi yang valid.
- * Kata sandi diverifikasi melalui pencocokan hash bcrypt, kemudian JWT token dibuat
- * dengan masa kedaluwarsa 1 hari untuk manajemen sesi aman.
- */
-// function login
+
 const login = (req, res) => {
     let { email, password } = req.body;
     email = cleanInput(email);
@@ -50,11 +35,7 @@ const login = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                           LOGIKA DAFTAR AKUN (REGISTER)                    */
 /* -------------------------------------------------------------------------- */
-/**
- * Rationale: Mendaftarkan akun pelanggan baru dengan menjamin keunikan email.
- * Password di-hash menggunakan bcrypt dengan salt rounds 10 demi keamanan penyimpanan data sensitif.
- */
-// function register
+
 const register = async (req, res) => {
     let { name, email, password } = req.body;
     name = cleanInput(name);

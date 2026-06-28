@@ -1,10 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: UserLayout.jsx
- * KELOMPOK: Tata Letak (Layout)
- * DESKRIPSI: Kerangka tata letak (layout) rute aplikasi FreshMarket untuk UserLayout.
- * ==============================================================================
- */
 
 /* -------------------------------------------------------------------------- */
 /*                            DEPENDENSI & IMPOR                              */

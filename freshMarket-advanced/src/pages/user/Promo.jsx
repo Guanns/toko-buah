@@ -2,18 +2,18 @@
 /*                            DEPENDENSI & IMPOR                              */
 /* -------------------------------------------------------------------------- */
 import React, { useState, useEffect } from 'react';
-import { 
+import {
 
 /* -------------------------------------------------------------------------- */
 /*                          KONSTANTA & UTILITY LOKAL                         */
 /* -------------------------------------------------------------------------- */
-  Ticket, 
-  Copy, 
-  CheckCircle2, 
-  Clock, 
-  Percent, 
-  ChevronDown, 
-  Info, 
+  Ticket,
+  Copy,
+  CheckCircle2,
+  Clock,
+  Percent,
+  ChevronDown,
+  Info,
   ShieldCheck,
   TrendingUp
 } from 'lucide-react';
@@ -21,12 +21,12 @@ import {
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function Promo
+
 const Promo = () => {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copiedCode, setCopiedCode] = useState(null);
-  const [expandedVoucher, setExpandedVoucher] = useState(null); 
+  const [expandedVoucher, setExpandedVoucher] = useState(null);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/vouchers/active')
@@ -44,15 +44,15 @@ const Promo = () => {
   const handleCopyCode = (code) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
-    setTimeout(() => setCopiedCode(null), 2500); 
+    setTimeout(() => setCopiedCode(null), 2500);
   };
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Tanpa Batas Waktu';
-    return new Date(dateString).toLocaleDateString('id-ID', { 
-      day: 'numeric', 
-      month: 'long', 
-      year: 'numeric' 
+    return new Date(dateString).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     });
   };
 
@@ -63,8 +63,7 @@ const Promo = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pt-28 pb-24 px-4 md:px-8 font-sans text-gray-800 transition-colors duration-300">
       <div className="max-w-5xl mx-auto">
-        
-        
+
         <div className="mb-12 text-center md:text-left border-b border-gray-100 dark:border-gray-900 pb-8">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
             Voucher Belanja
@@ -74,7 +73,6 @@ const Promo = () => {
           </p>
         </div>
 
-        
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
             {[1, 2, 3, 4].map(i => (
@@ -89,7 +87,7 @@ const Promo = () => {
             ))}
           </div>
         ) : vouchers.length === 0 ? (
-          
+
           <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-16 flex flex-col items-center text-center shadow-xs max-w-lg mx-auto">
             <div className="bg-gray-50 dark:bg-gray-950 p-5 rounded-full mb-5 text-gray-400">
               <Ticket size={40} strokeWidth={1.5} />
@@ -100,23 +98,22 @@ const Promo = () => {
             </p>
           </div>
         ) : (
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {vouchers.map((voucher) => {
               const isPercent = voucher.discount_type === 'PERCENT';
               const isHighDiscount = !isPercent && Number(voucher.discount_value) >= 20000;
-              const discountLabel = isPercent 
-                ? `${voucher.discount_value}%` 
+              const discountLabel = isPercent
+                ? `${voucher.discount_value}%`
                 : `Rp${Number(voucher.discount_value).toLocaleString('id-ID')}`;
-              
+
               const isLimited = voucher.quota !== null && voucher.quota > 0;
               const isLowQuota = isLimited && voucher.quota <= 10;
               const isExpanded = expandedVoucher === voucher.id;
 
-              
               let leftGradient = "from-emerald-500 to-teal-600";
               let badgeText = "Diskon";
-              
+
               if (isPercent) {
                 leftGradient = "from-emerald-500 to-teal-600";
                 badgeText = "Persentase";
@@ -129,25 +126,23 @@ const Promo = () => {
               }
 
               return (
-                <div 
-                  key={voucher.id} 
+                <div
+                  key={voucher.id}
                   className={`relative flex flex-col bg-white dark:bg-gray-900 border ${
-                    isExpanded 
-                      ? 'border-green-300 dark:border-green-800 ring-1 ring-green-300/30' 
+                    isExpanded
+                      ? 'border-green-300 dark:border-green-800 ring-1 ring-green-300/30'
                       : 'border-gray-100 dark:border-gray-800/80'
                   } rounded-3xl shadow-xs hover:shadow-md hover:border-green-300 dark:hover:border-green-800 transition-all duration-300 overflow-hidden group`}
                 >
-                  
+
                   <div className="absolute top-[45%] md:top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gray-50 dark:bg-gray-950 rounded-full border-r border-gray-150 dark:border-gray-850 z-10"></div>
                   <div className="absolute top-[45%] md:top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gray-50 dark:bg-gray-950 rounded-full border-l border-gray-150 dark:border-gray-850 z-10"></div>
 
-                  
                   <div className="flex flex-col md:flex-row flex-1">
-                    
-                    
+
                     <div className={`bg-gradient-to-br ${leftGradient} md:w-1/3 p-6 flex flex-col items-center justify-center text-center relative overflow-hidden shrink-0`}>
                       <div className="absolute -top-6 -right-6 w-16 h-16 bg-white/10 rounded-full pointer-events-none"></div>
-                      
+
                       <span className="text-white/80 text-[9px] font-black uppercase tracking-widest mb-1.5 flex items-center gap-1 select-none">
                         {isPercent ? <Percent size={9} /> : <TrendingUp size={9} />} {badgeText}
                       </span>
@@ -159,15 +154,14 @@ const Promo = () => {
                       </span>
                     </div>
 
-                    
                     <div className="p-6 flex-1 flex flex-col justify-between relative">
                       <div>
-                        
+
                         <div className="flex justify-between items-center gap-2 mb-2">
                           <h3 className="text-base font-black text-gray-900 dark:text-white tracking-wide uppercase select-all">
                             {voucher.code}
                           </h3>
-                          
+
                           {isLowQuota ? (
                             <span className="text-[9px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/40 px-2 py-0.5 rounded-md animate-pulse select-none">
                               Sisa {voucher.quota}
@@ -182,7 +176,7 @@ const Promo = () => {
                             </span>
                           )}
                         </div>
-                        
+
                         <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold mt-1">
                           Min. Belanja:{' '}
                           <span className="text-gray-900 dark:text-gray-250 font-bold">
@@ -191,9 +185,8 @@ const Promo = () => {
                         </p>
                       </div>
 
-                      
                       <div className="mt-5 pt-3 border-t border-gray-50 dark:border-gray-800/60 flex items-center justify-between gap-4">
-                        
+
                         <div className="flex flex-col">
                           <span className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center gap-1 select-none">
                             <Clock size={9} /> Berlaku S/D
@@ -203,7 +196,6 @@ const Promo = () => {
                           </p>
                         </div>
 
-                        
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => toggleTerms(voucher.id)}
@@ -213,11 +205,11 @@ const Promo = () => {
                             <ChevronDown size={12} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180 text-green-600' : ''}`} />
                           </button>
 
-                          <button 
+                          <button
                             onClick={() => handleCopyCode(voucher.code)}
                             className={`flex items-center gap-1 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 border cursor-pointer select-none ${
-                              copiedCode === voucher.code 
-                              ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800' 
+                              copiedCode === voucher.code
+                              ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800'
                               : 'bg-gray-900 hover:bg-gray-800 text-white border-transparent'
                             }`}
                           >
@@ -239,8 +231,7 @@ const Promo = () => {
                     </div>
                   </div>
 
-                  
-                  <div 
+                  <div
                     className={`transition-all duration-300 overflow-hidden ${
                       isExpanded ? 'max-h-56 border-t border-gray-50 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-950/20' : 'max-h-0'
                     }`}

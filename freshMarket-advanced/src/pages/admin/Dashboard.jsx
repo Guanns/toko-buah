@@ -4,14 +4,14 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { jsPDF } from 'jspdf';
-import { 
-  TrendingUp, 
-  ShoppingCart, 
-  Users, 
-  CheckCircle, 
-  AlertTriangle, 
-  Package, 
-  RefreshCw, 
+import {
+  TrendingUp,
+  ShoppingCart,
+  Users,
+  CheckCircle,
+  AlertTriangle,
+  Package,
+  RefreshCw,
   Calendar,
   ArrowRight,
   TrendingDown,
@@ -41,7 +41,7 @@ ChartJS.register(
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function Dashboard
+
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -49,8 +49,7 @@ const Dashboard = () => {
   const [greeting, setGreeting] = useState('');
   const [statusMessage, setStatusMessage] = useState(null);
   const [downloadedSuratJalan, setDownloadedSuratJalan] = useState([]);
-  
-  
+
   const [isDark, setIsDark] = useState(
     document.documentElement.classList.contains('dark') || localStorage.getItem('theme') === 'dark'
   );
@@ -69,7 +68,6 @@ const Dashboard = () => {
     return () => observer.disconnect();
   }, []);
 
-  
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 11) return 'Selamat pagi';
@@ -81,8 +79,7 @@ const Dashboard = () => {
   const processWeeklySales = (salesData) => {
     const result = [];
     const salesMap = {};
-    
-    
+
     const toLocalYYYYMMDD = (dateInput) => {
       const d = new Date(dateInput);
       const year = d.getFullYear();
@@ -104,7 +101,7 @@ const Dashboard = () => {
       const d = new Date();
       d.setDate(d.getDate() - i);
       const dateStr = toLocalYYYYMMDD(d);
-      
+
       result.push({
         date: dateStr,
         amount: salesMap[dateStr] || 0
@@ -117,10 +114,10 @@ const Dashboard = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const endpoint = user?.role === 'admin' 
+      const endpoint = user?.role === 'admin'
         ? 'http://localhost:5000/api/admin/dashboard/stats'
         : 'http://localhost:5000/api/kasir/dashboard/stats';
-      
+
       const res = await fetch(endpoint, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -128,11 +125,11 @@ const Dashboard = () => {
       });
       if (res.ok) {
         const stats = await res.json();
-        
+
         if (user?.role === 'admin' && stats.weeklySales) {
           stats.weeklySales = processWeeklySales(stats.weeklySales);
         }
-        
+
         setData(stats);
       } else {
         if (res.status === 401 || res.status === 403) {
@@ -157,7 +154,7 @@ const Dashboard = () => {
     try {
       const res = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/status`, {
         method: 'PUT',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
@@ -165,7 +162,7 @@ const Dashboard = () => {
       });
       if (res.ok) {
         showStatusMsg(`Pesanan #${orderId} berhasil diubah ke status ${newStatus}`);
-        fetchData(); 
+        fetchData();
       } else {
         showStatusMsg('Gagal memperbarui status pesanan', 'error');
       }
@@ -190,7 +187,7 @@ const Dashboard = () => {
 
   const safeParseItems = (items) => {
     if (!items) return [];
-    if (Array.isArray(items)) return items; 
+    if (Array.isArray(items)) return items;
     try { return JSON.parse(items); } catch(e) { return []; }
   };
 
@@ -204,21 +201,18 @@ const Dashboard = () => {
     const pageW = doc.internal.pageSize.getWidth();
     const margin = 12;
 
-    
-    doc.setFillColor(16, 185, 129); 
+    doc.setFillColor(16, 185, 129);
     doc.rect(0, 0, pageW, 10, 'F');
 
-    
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
-    doc.setTextColor(31, 41, 55); 
+    doc.setTextColor(31, 41, 55);
     doc.text('SURAT JALAN PENGIRIMAN BARANG', pageW / 2, 22, { align: 'center' });
-    
+
     doc.setLineWidth(0.3);
     doc.setDrawColor(16, 185, 129);
     doc.line(margin, 25, pageW - margin, 25);
 
-    
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
     doc.setTextColor(55, 65, 81);
@@ -227,11 +221,10 @@ const Dashboard = () => {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(75, 85, 99);
-    
+
     doc.text(`Nama Pembeli   : ${order.customer_name || '-'}`, margin, 38);
     doc.text(`Nomor Telepon  : ${phoneNumber}`, margin, 43);
-    
-    
+
     const splitAddress = doc.splitTextToSize(`Alamat Tujuan   : ${shippingAddress}`, pageW - margin * 2);
     doc.text(splitAddress, margin, 48);
 
@@ -242,14 +235,12 @@ const Dashboard = () => {
     doc.line(margin, y, pageW - margin, y);
     y += 5;
 
-    
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
     doc.setTextColor(55, 65, 81);
     doc.text('DAFTAR BARANG YANG DIKIRIM', margin, y);
     y += 4;
 
-    
     doc.setFillColor(243, 244, 246);
     doc.rect(margin, y - 3, pageW - margin * 2, 6, 'F');
     doc.setFont('helvetica', 'bold');
@@ -259,7 +250,6 @@ const Dashboard = () => {
     doc.text('Kuantitas (kg / unit)', pageW - margin - 2, y + 1.2, { align: 'right' });
     y += 6;
 
-    
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(55, 65, 81);
     itemsList.forEach((item, idx) => {
@@ -277,28 +267,25 @@ const Dashboard = () => {
     doc.line(margin, y, pageW - margin, y);
     y += 8;
 
-    
     const colW = (pageW - margin * 2) / 3;
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(7);
     doc.setTextColor(75, 85, 99);
-    
+
     doc.text('Petugas Kasir,', margin + colW / 2, y, { align: 'center' });
     doc.text('Petugas Kurir,', margin + colW + colW / 2, y, { align: 'center' });
     doc.text('Penerima Barang,', margin + colW * 2 + colW / 2, y, { align: 'center' });
 
-    y += 16; 
-    
+    y += 16;
+
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(6.5);
     doc.text('( ___________________ )', margin + colW / 2, y, { align: 'center' });
     doc.text('( ___________________ )', margin + colW + colW / 2, y, { align: 'center' });
     doc.text(`( ${order.customer_name || '___________________'} )`, margin + colW * 2 + colW / 2, y, { align: 'center' });
 
-    
     doc.save(`Surat_Jalan_Order_${order.id}.pdf`);
 
-    
     setDownloadedSuratJalan(prev => {
       if (!prev.includes(order.id)) {
         return [...prev, order.id];
@@ -316,43 +303,35 @@ const Dashboard = () => {
     );
   }
 
-  
-  
-  
-
   return (
     <div className="font-sans text-gray-800 max-w-7xl mx-auto">
-      
-      
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 tracking-tight capitalize">
             {greeting}, {user?.name || 'Staff'}!
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            {user?.role === 'admin' 
+            {user?.role === 'admin'
               ? 'Berikut adalah ringkasan kinerja penjualan dan katalog Freshmarket.'
               : 'Pantau pesanan masuk hari ini dan cek stok produk segar Anda.'
             }
           </p>
         </div>
-        
-        <button 
-          onClick={fetchData} 
+
+        <button
+          onClick={fetchData}
           className="flex items-center justify-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 px-4 py-2 rounded-lg text-xs font-medium transition-all active:scale-95 shadow-sm"
         >
           <RefreshCw size={14} /> Refresh Data
         </button>
       </div>
 
-      
       {user?.role === 'admin' && data && (
         <div className="space-y-8 animate-in fade-in duration-300">
-          
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            
+
             <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center gap-4">
               <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
                 <DollarSign size={22} />
@@ -363,7 +342,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            
             <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center gap-4">
               <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
                 <TrendingUp size={22} />
@@ -374,7 +352,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            
             <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center gap-4">
               <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
                 <CheckCircle size={22} />
@@ -385,7 +362,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            
             <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center gap-4">
               <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
                 <Users size={22} />
@@ -399,20 +375,19 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            
+
             <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-xl p-6 shadow-sm lg:col-span-2 flex flex-col justify-between">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-gray-800 dark:text-white">Tren Penjualan Mingguan</h3>
                 <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/45 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full font-medium">7 Hari Terakhir</span>
               </div>
-              
+
               <div className="relative w-full h-52 flex items-center justify-center">
                 {data.weeklySales && data.weeklySales.length > 0 ? (
                   (() => {
                     const textColor = isDark ? '#9ca3af' : '#4b5563';
                     const gridColor = isDark ? 'rgba(75, 85, 99, 0.15)' : 'rgba(229, 231, 235, 0.5)';
-                    
+
                     const chartData = {
                       labels: data.weeklySales.map(item => {
                         const dateObj = new Date(item.date);
@@ -493,16 +468,15 @@ const Dashboard = () => {
               </div>
             </div>
 
-            
             <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm flex flex-col">
               <h3 className="text-sm font-semibold text-gray-800 mb-4">Produk Terlaris</h3>
-              
+
               <div className="space-y-4 flex-1">
                 {data.bestSellers && data.bestSellers.length > 0 ? (
                   data.bestSellers.map((prod, idx) => (
                     <div key={prod.id} className="flex items-center gap-3 border-b border-gray-50 pb-3 last:border-0 last:pb-0">
                       <span className="text-xs font-semibold text-gray-400 w-4">#{idx + 1}</span>
-                      
+
                       {prod.image_url ? (
                         <img src={prod.image_url} alt={prod.name} className="w-10 h-10 rounded-lg object-cover border border-gray-100" />
                       ) : (
@@ -510,12 +484,12 @@ const Dashboard = () => {
                           <Package size={16} />
                         </div>
                       )}
-                      
+
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-medium text-gray-800 truncate capitalize">{prod.name}</p>
                         <p className="text-[10px] text-gray-400 uppercase mt-0.5">{prod.category} • SKU: {prod.sku}</p>
                       </div>
-                      
+
                       <div className="text-right">
                         <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
                           {prod.total_sold} Pcs
@@ -536,11 +510,9 @@ const Dashboard = () => {
         </div>
       )}
 
-      
       {user?.role === 'kasir' && data && (
         <div className="space-y-8 animate-in fade-in duration-300">
-          
-          
+
           {data.lowStockProducts && data.lowStockProducts.length > 0 && (
             <div className="bg-rose-50 border border-rose-100 text-rose-800 rounded-xl p-4 flex gap-3 shadow-sm">
               <AlertTriangle className="text-rose-500 shrink-0 mt-0.5" size={20} />
@@ -558,10 +530,8 @@ const Dashboard = () => {
             </div>
           )}
 
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            
+
             <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center gap-4">
               <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
                 <DollarSign size={22} />
@@ -572,7 +542,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            
             <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center gap-4">
               <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
                 <ShoppingCart size={22} />
@@ -583,7 +552,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            
             <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center gap-4">
               <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
                 <AlertTriangle size={22} />
@@ -596,13 +564,12 @@ const Dashboard = () => {
 
           </div>
 
-          
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
               <h3 className="text-sm font-semibold text-gray-800">Pesanan Masuk Terbaru (Recent Orders)</h3>
               <span className="text-[10px] text-gray-400 font-medium">Batas update status langsung</span>
             </div>
-            
+
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
@@ -625,8 +592,8 @@ const Dashboard = () => {
                         <td className="px-6 py-4 font-medium text-gray-800">{formatRupiah(order.total_amount)}</td>
                         <td className="px-6 py-4">
                           <span className={`px-2.5 py-0.5 rounded-full font-semibold border ${
-                            order.status === 'SELESAI' 
-                              ? 'bg-green-50 border-green-200 text-green-700' 
+                            order.status === 'SELESAI'
+                              ? 'bg-green-50 border-green-200 text-green-700'
                               : order.status === 'DIKIRIM'
                               ? 'bg-blue-50 border-blue-200 text-blue-700'
                               : order.status === 'DIPROSES'
@@ -639,7 +606,7 @@ const Dashboard = () => {
                         <td className="px-6 py-4 text-center">
                           <div className="flex items-center justify-center gap-2">
                             {order.status === 'MENUNGGU_ADMIN' && (
-                              <button 
+                              <button
                                 onClick={() => handleUpdateStatus(order.id, 'DIPROSES')}
                                 className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-semibold text-xs transition-colors"
                               >
@@ -648,13 +615,13 @@ const Dashboard = () => {
                             )}
                             {order.status === 'DIPROSES' && (
                               <div className="flex items-center justify-center gap-2">
-                                <button 
-                                  onClick={() => handleCetakSuratJalan(order)} 
+                                <button
+                                  onClick={() => handleCetakSuratJalan(order)}
                                   className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-400 font-bold text-xs rounded-lg transition-all border border-indigo-100 dark:border-indigo-900/40 shadow-2xs active:scale-95 cursor-pointer"
                                 >
                                   Unduh Surat Jalan
                                 </button>
-                                <button 
+                                <button
                                   onClick={() => handleUpdateStatus(order.id, 'DIKIRIM')}
                                   disabled={!downloadedSuratJalan.includes(order.id)}
                                   className={`px-3 py-1.5 font-bold text-xs rounded-lg transition-all border shadow-2xs ${
@@ -692,7 +659,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      
       {statusMessage && (
         <div className="fixed bottom-6 right-6 z-200 animate-in slide-in-from-right-10 fade-in duration-300">
           <div className={`px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2 font-medium text-white text-xs ${

@@ -88,8 +88,8 @@ export const ToastProvider = ({ children }) => {
 
   return (
     <ToastContext.Provider value={{ toast }}>
-      <Toaster 
-        position="top-center" 
+      <Toaster
+        position="top-center"
         reverseOrder={false}
         toastOptions={{
           className: 'font-sans',

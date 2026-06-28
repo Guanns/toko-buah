@@ -9,19 +9,19 @@ import { useToast } from '../../context/ToastContext';
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function AdminPromo
+
 const AdminPromo = () => {
   const { logout } = useAuth();
   const { toast } = useToast();
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ 
-    code: '', 
-    discount_type: 'PERCENT', 
-    discount_value: '', 
+  const [formData, setFormData] = useState({
+    code: '',
+    discount_type: 'PERCENT',
+    discount_value: '',
     min_purchase: '',
     quota: '',
     expired_at: ''
@@ -71,14 +71,14 @@ const AdminPromo = () => {
     try {
       const res = await fetch('http://localhost:5000/api/admin/vouchers', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify(formData)
       });
       const data = await res.json();
-      
+
       if(res.ok) {
         toast.success("Voucher berhasil dibuat!");
         setIsModalOpen(false);
@@ -87,8 +87,8 @@ const AdminPromo = () => {
       } else {
         toast.error(data.error || "Gagal membuat voucher");
       }
-    } catch (err) { 
-      toast.error('Terjadi kesalahan jaringan.'); 
+    } catch (err) {
+      toast.error('Terjadi kesalahan jaringan.');
     }
   };
 
@@ -101,7 +101,7 @@ const AdminPromo = () => {
       confirmType: 'danger',
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/admin/vouchers/${id}`, { 
+          const res = await fetch(`http://localhost:5000/api/admin/vouchers/${id}`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -121,12 +121,10 @@ const AdminPromo = () => {
     });
   };
 
-  
-  const filteredVouchers = vouchers.filter(v => 
+  const filteredVouchers = vouchers.filter(v =>
     v.code.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  
   const formatDate = (dateString) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -143,29 +141,28 @@ const AdminPromo = () => {
 
   return (
     <div className="font-sans max-w-7xl mx-auto text-gray-800">
-      
-      
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Promo & Voucher</h1>
           <p className="text-sm text-gray-500 mt-1">Kelola kode diskon untuk pelanggan setia Anda.</p>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-          
+
           <div className="relative w-full sm:w-64">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input 
-              type="text" 
-              placeholder="Cari kode promo..." 
+            <input
+              type="text"
+              placeholder="Cari kode promo..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 text-sm transition-all"
             />
           </div>
-          
-          <button 
-            onClick={() => setIsModalOpen(true)} 
+
+          <button
+            onClick={() => setIsModalOpen(true)}
             className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white px-5 py-2 rounded-lg font-medium text-sm transition-all flex justify-center items-center gap-2 active:scale-95 shadow-sm"
           >
             <Plus size={16} /> Buat Voucher
@@ -173,7 +170,6 @@ const AdminPromo = () => {
         </div>
       </div>
 
-      
       {filteredVouchers.length === 0 ? (
         <div className="bg-white p-16 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center shadow-sm">
           <Ticket size={40} className="text-gray-300 mb-4" strokeWidth={1.5} />
@@ -227,7 +223,7 @@ const AdminPromo = () => {
                       <td className="px-6 py-4">
                         <span className={`text-sm font-medium ${isEnded ? 'text-gray-400' : 'text-gray-600'}`}>Rp {Number(v.min_purchase).toLocaleString('id-ID')}</span>
                       </td>
-                      
+
                       <td className="px-6 py-4">
                         <div className={`flex items-center gap-1.5 text-sm font-medium ${isOutOfQuota ? 'text-red-550' : 'text-gray-600'}`}>
                           <Users size={14} className={isOutOfQuota ? 'text-red-400' : 'text-gray-400'} />
@@ -242,8 +238,8 @@ const AdminPromo = () => {
                       </td>
 
                       <td className="px-6 py-4 text-right">
-                        <button 
-                          onClick={() => handleDelete(v.id)} 
+                        <button
+                          onClick={() => handleDelete(v.id)}
                           className="text-gray-400 hover:text-red-500 transition-colors p-1.5 rounded-md hover:bg-red-50"
                           title="Hapus Voucher"
                         >
@@ -259,27 +255,26 @@ const AdminPromo = () => {
         </div>
       )}
 
-      
       {isModalOpen && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
           <div className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200 border border-gray-100">
-            
+
             <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
               <h2 className="text-base font-medium text-gray-800">Buat Voucher Baru</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-700 transition-colors">
                 <X size={18}/>
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="text-xs font-medium text-gray-500 block mb-1">Kode Voucher</label>
-                <input 
-                  type="text" 
-                  required 
-                  value={formData.code} 
-                  onChange={e => setFormData({...formData, code: e.target.value.toUpperCase()})} 
-                  className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 uppercase tracking-wide focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" 
+                <input
+                  type="text"
+                  required
+                  value={formData.code}
+                  onChange={e => setFormData({...formData, code: e.target.value.toUpperCase()})}
+                  className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 uppercase tracking-wide focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                   placeholder="Contoh: FRESH2026"
                 />
               </div>
@@ -287,9 +282,9 @@ const AdminPromo = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-medium text-gray-500 block mb-1">Tipe Diskon</label>
-                  <select 
-                    value={formData.discount_type} 
-                    onChange={e => setFormData({...formData, discount_type: e.target.value})} 
+                  <select
+                    value={formData.discount_type}
+                    onChange={e => setFormData({...formData, discount_type: e.target.value})}
                     className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 transition-all bg-white"
                   >
                     <option value="PERCENT">Persentase ( % )</option>
@@ -298,12 +293,12 @@ const AdminPromo = () => {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-gray-500 block mb-1">Nilai Diskon</label>
-                  <input 
-                    type="number" 
-                    required 
-                    value={formData.discount_value} 
-                    onChange={e => setFormData({...formData, discount_value: e.target.value})} 
-                    className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" 
+                  <input
+                    type="number"
+                    required
+                    value={formData.discount_value}
+                    onChange={e => setFormData({...formData, discount_value: e.target.value})}
+                    className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     placeholder={formData.discount_type === 'PERCENT' ? 'Misal : 10' : 'Misal : 15000'}
                   />
                 </div>
@@ -311,35 +306,34 @@ const AdminPromo = () => {
 
               <div>
                 <label className="text-xs font-medium text-gray-500 block mb-1">Minimal Belanja (Rp)</label>
-                <input 
-                  type="number" 
-                  required 
-                  value={formData.min_purchase} 
-                  onChange={e => setFormData({...formData, min_purchase: e.target.value})} 
-                  className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" 
+                <input
+                  type="number"
+                  required
+                  value={formData.min_purchase}
+                  onChange={e => setFormData({...formData, min_purchase: e.target.value})}
+                  className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                   placeholder="Misal : 50000"
                 />
               </div>
 
-              
               <div className="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
                 <div>
                   <label className="text-xs font-medium text-gray-500 block mb-1">Jumlah Kuota</label>
-                  <input 
-                    type="number" 
-                    value={formData.quota} 
-                    onChange={e => setFormData({...formData, quota: e.target.value})} 
-                    className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" 
+                  <input
+                    type="number"
+                    value={formData.quota}
+                    onChange={e => setFormData({...formData, quota: e.target.value})}
+                    className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     placeholder="Kosongkan jika unlimit"
                   />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-gray-500 block mb-1">Kedaluwarsa Pada?</label>
-                  <input 
-                    type="date" 
-                    value={formData.expired_at} 
-                    onChange={e => setFormData({...formData, expired_at: e.target.value})} 
-                    className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" 
+                  <input
+                    type="date"
+                    value={formData.expired_at}
+                    onChange={e => setFormData({...formData, expired_at: e.target.value})}
+                    className="w-full border border-gray-200 px-4 py-2 rounded-lg text-sm font-normal text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                   />
                 </div>
               </div>
@@ -355,7 +349,6 @@ const AdminPromo = () => {
         </div>
       )}
 
-      
       {confirmModal.isOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-xl border border-slate-100 overflow-hidden p-6 animate-in zoom-in-95 duration-200">
@@ -363,20 +356,20 @@ const AdminPromo = () => {
               <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4 border bg-rose-50 text-rose-550 border-rose-100/50">
                 <AlertTriangle size={24} />
               </div>
-              
+
               <h3 className="text-sm font-semibold text-slate-800 mb-1.5">{confirmModal.title}</h3>
               <p className="text-xs text-slate-505 font-medium leading-relaxed mb-6">
                 {confirmModal.message}
               </p>
-              
+
               <div className="flex gap-3 w-full">
-                <button 
+                <button
                   onClick={closeConfirm}
                   className="flex-1 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 font-semibold text-xs rounded-xl transition-all"
                 >
                   Batal
                 </button>
-                <button 
+                <button
                   onClick={confirmModal.onConfirm}
                   className="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs rounded-xl transition-all shadow-sm shadow-rose-600/10 active:scale-95"
                 >

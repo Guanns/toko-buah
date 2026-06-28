@@ -11,10 +11,10 @@ import Footer from '../../components/Footer';
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function Home
+
 const Home = () => {
   return (
-    <div className="pt-20"> 
+    <div className="pt-20">
       <Hero />
       <VoucherHome />
       <VisiMisi />

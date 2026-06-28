@@ -1,10 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: CaraKerja.jsx
- * KELOMPOK: Komponen UI
- * DESKRIPSI: Komponen antarmuka pengguna untuk CaraKerja FreshMarket.
- * ==============================================================================
- */
 
 /* -------------------------------------------------------------------------- */
 /*                            DEPENDENSI & IMPOR                              */
@@ -15,7 +8,7 @@ import { ShoppingBag, CreditCard, PackageCheck, Truck } from 'lucide-react';
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function CaraKerja
+
 const CaraKerja = () => {
   const steps = [
     {
@@ -51,8 +44,7 @@ const CaraKerja = () => {
   return (
     <section id="cara-kerja" className="py-20 md:py-24 px-6 bg-white dark:bg-gray-950 font-sans transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
-        
-        
+
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white tracking-tight">
             Cara <span className="text-green-600 dark:text-green-400">Belanja</span>
@@ -62,24 +54,21 @@ const CaraKerja = () => {
           </p>
         </div>
 
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
           <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-1 bg-gray-50 dark:bg-gray-900 rounded-full -z-10"></div>
           {steps.map((step) => (
-            <div 
-              key={step.id} 
+            <div
+              key={step.id}
               className="relative bg-white dark:bg-gray-900 p-8 rounded-4xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:border-green-100 dark:hover:border-green-500/20 hover:-translate-y-2 transition-all duration-300 group"
             >
               <div className="absolute -top-4 -right-4 w-10 h-10 bg-gray-900 dark:bg-gray-800 text-white rounded-full flex items-center justify-center font-black text-lg shadow-md group-hover:bg-green-600 dark:group-hover:bg-green-500 transition-colors">
                 {step.id}
               </div>
 
-              
               <div className={`${step.bgColor} w-20 h-20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                 {step.icon}
               </div>
 
-              
               <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">{step.title}</h3>
               <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
                 {step.description}

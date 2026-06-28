@@ -9,21 +9,19 @@ import { User, Mail, Lock, Eye, EyeOff, CheckCircle2, AlertCircle, ArrowLeft, Sh
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function Profile
+
 const Profile = () => {
   const { user, updateUser } = useAuth();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('info');
 
-  
   const [name, setName]   = useState('');
   const [email, setEmail] = useState('');
-  const [address, setAddress] = useState(''); 
+  const [address, setAddress] = useState('');
   const [infoLoading, setInfoLoading] = useState(false);
-  const [infoMsg, setInfoMsg] = useState(null); 
+  const [infoMsg, setInfoMsg] = useState(null);
 
-  
   const [currentPassword, setCurrentPassword]     = useState('');
   const [newPassword, setNewPassword]             = useState('');
   const [confirmPassword, setConfirmPassword]     = useState('');
@@ -37,7 +35,7 @@ const Profile = () => {
     if (!user) { navigate('/login'); return; }
     setName(user.name || '');
     setEmail(user.email || '');
-    setAddress(user.address || ''); 
+    setAddress(user.address || '');
   }, [user, navigate]);
 
   const showMsg = (setter, type, text) => {
@@ -51,15 +49,15 @@ const Profile = () => {
     try {
       const res = await fetch(`http://localhost:5000/api/user/profile/${user.id}`, {
         method: 'PUT',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ name, email }), 
+        body: JSON.stringify({ name, email }),
       });
       const data = await res.json();
       if (res.ok) {
-        
+
         updateUser({ name: data.name, email: data.email, address: address });
         showMsg(setInfoMsg, 'success', 'Profil berhasil diperbarui!');
       } else {
@@ -82,7 +80,7 @@ const Profile = () => {
     try {
       const res = await fetch(`http://localhost:5000/api/user/profile/${user.id}/password`, {
         method: 'PUT',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
@@ -119,12 +117,10 @@ const Profile = () => {
     <div className="min-h-screen bg-slate-50/60 pt-28 pb-16 px-4 font-sans">
       <div className="max-w-xl mx-auto">
 
-        
         <button onClick={() => navigate(-1)} className="group flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-emerald-600 transition-colors mb-6">
           <ArrowLeft size={15} className="group-hover:-translate-x-1 transition-transform" /> Kembali
         </button>
 
-        
         <div className="bg-white border border-slate-100 rounded-2xl p-6 flex items-center gap-5 mb-6 shadow-sm">
           <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-black uppercase shrink-0 border border-emerald-100">
             {user?.name?.charAt(0) || 'U'}
@@ -138,7 +134,6 @@ const Profile = () => {
           </div>
         </div>
 
-        
         <div className="flex bg-slate-100 rounded-xl p-1 mb-6">
           <button
             onClick={() => setActiveTab('info')}
@@ -154,7 +149,6 @@ const Profile = () => {
           </button>
         </div>
 
-        
         {activeTab === 'info' && (
           <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
             <h2 className="text-sm font-semibold text-slate-700 mb-5">Edit Informasi Profil</h2>
@@ -204,7 +198,6 @@ const Profile = () => {
           </div>
         )}
 
-        
         {activeTab === 'password' && (
           <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
             <h2 className="text-sm font-semibold text-slate-700 mb-5">Ganti Kata Sandi</h2>

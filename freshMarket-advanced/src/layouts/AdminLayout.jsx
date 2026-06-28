@@ -1,10 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: AdminLayout.jsx
- * KELOMPOK: Tata Letak (Layout)
- * DESKRIPSI: Kerangka tata letak (layout) rute aplikasi FreshMarket untuk AdminLayout.
- * ==============================================================================
- */
 
 /* -------------------------------------------------------------------------- */
 /*                            DEPENDENSI & IMPOR                              */

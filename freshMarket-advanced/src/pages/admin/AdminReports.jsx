@@ -11,29 +11,26 @@ import { useAuth } from '../../context/AuthContext';
 
 const API = 'http://localhost:5000';
 
-// function fmt
 const fmt = (n) =>
   new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n || 0);
 
-// function today
 const today = () => new Date().toISOString().slice(0, 10);
 
-// function StatusBadge
 const StatusBadge = ({ status }) => {
   const map = {
-    
+
     MENUNGGU_ADMIN: 'bg-amber-50 dark:bg-amber-950/35 border border-amber-200 dark:border-amber-900/40 text-amber-700 dark:text-amber-400',
     DIPROSES:       'bg-blue-50 dark:bg-blue-950/35 border border-blue-200 dark:border-blue-900/40 text-blue-700 dark:text-blue-400',
     DIKIRIM:        'bg-indigo-50 dark:bg-indigo-950/35 border border-indigo-200 dark:border-indigo-900/40 text-indigo-700 dark:text-indigo-400',
     SELESAI:        'bg-emerald-50 dark:bg-emerald-950/35 border border-emerald-200 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-405',
-    
+
     qris:           'bg-emerald-50 dark:bg-emerald-950/35 border border-emerald-200 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-405',
     bca:            'bg-blue-50 dark:bg-blue-950/35 border border-blue-200 dark:border-blue-900/40 text-blue-700 dark:text-blue-405',
     mandiri:        'bg-orange-50 dark:bg-orange-950/35 border border-orange-200 dark:border-orange-900/40 text-orange-700 dark:text-orange-405',
   };
-  
+
   const displayLabel = status === 'qris' ? 'QRIS Instan' : status === 'bca' ? 'BCA Virtual Account' : status === 'mandiri' ? 'Mandiri VA' : status;
-  
+
   return (
     <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${map[status] || 'bg-slate-100 dark:bg-slate-805 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800'}`}>
       {displayLabel}
@@ -41,16 +38,15 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-// function SummaryCard
 const SummaryCard = ({ icon: Icon, label, value, sub, colorClass, borderClass }) => (
   <div className={`bg-white dark:bg-gray-900 border ${borderClass || 'border-slate-100 dark:border-gray-800'} rounded-2xl p-6 flex gap-5 items-start shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-305 cursor-default relative overflow-hidden group`}>
-    
+
     <div className={`absolute -right-6 -bottom-6 w-24 h-24 rounded-full opacity-[0.03] dark:opacity-[0.06] blur-xl group-hover:scale-150 transition-all duration-500 ${colorClass}`} />
-    
+
     <div className={`p-3.5 rounded-xl ${colorClass} text-white shrink-0 shadow-md group-hover:scale-110 transition-transform duration-300`}>
       <Icon size={22} />
     </div>
-    
+
     <div className="flex-1 min-w-0">
       <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">{label}</p>
       <p className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">{value}</p>
@@ -63,7 +59,6 @@ const SummaryCard = ({ icon: Icon, label, value, sub, colorClass, borderClass })
   </div>
 );
 
-// function Table
 const Table = ({ title, subtitle, icon: Icon, headers, rows, emptyMsg = 'Tidak ada data' }) => (
   <div className="bg-white dark:bg-gray-900 border border-slate-100 dark:border-gray-800 rounded-2xl shadow-2xs hover:shadow-sm transition-all duration-300 overflow-hidden flex flex-col h-full">
     <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-gray-800 bg-slate-50/20 dark:bg-gray-950/20">
@@ -77,14 +72,14 @@ const Table = ({ title, subtitle, icon: Icon, headers, rows, emptyMsg = 'Tidak a
         </div>
       </div>
     </div>
-    
+
     <div className="overflow-x-auto flex-1">
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr className="bg-slate-50/60 dark:bg-gray-950/40 border-b border-slate-100 dark:border-gray-800 text-[10px] uppercase tracking-wider text-slate-450 dark:text-slate-550 font-bold">
             {headers.map((h, i) => (
-              <th 
-                key={h} 
+              <th
+                key={h}
                 className={`px-6 py-3.5 font-semibold ${
                   i === headers.length - 1 ? 'text-right' : 'text-left'
                 }`}
@@ -115,7 +110,6 @@ export default function AdminReports() {
   const { user, logout } = useAuth();
   const isAdmin = user?.role === 'admin';
 
-  
   const [startDate, setStartDate]       = useState(today());
   const [endDate, setEndDate]           = useState(today());
   const [activePreset, setActivePreset] = useState('today');
@@ -123,7 +117,6 @@ export default function AdminReports() {
   const [topProducts, setTopProducts]   = useState([]);
   const [voucherPerf, setVoucherPerf]   = useState([]);
 
-  
   const [dailyClose, setDailyClose]     = useState(null);
   const [payMethods, setPayMethods]     = useState([]);
   const [lowStock, setLowStock]         = useState([]);
@@ -131,7 +124,6 @@ export default function AdminReports() {
   const [loading, setLoading]           = useState(false);
   const [fetchError, setFetchError]     = useState('');
 
-  
   const fetchAdmin = useCallback(async (sd, ed) => {
     setLoading(true);
     setFetchError('');
@@ -182,7 +174,7 @@ export default function AdminReports() {
   useEffect(() => {
     if (isAdmin) fetchAdmin(startDate, endDate);
     else         fetchKasir();
-  }, [isAdmin, fetchAdmin, fetchKasir]); 
+  }, [isAdmin, fetchAdmin, fetchKasir]);
 
   const handleFilter = () => fetchAdmin(startDate, endDate);
 
@@ -206,7 +198,6 @@ export default function AdminReports() {
     fetchAdmin(sd, ed);
   };
 
-  
   const downloadPDF = async () => {
     const { jsPDF } = await import('jspdf');
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -225,7 +216,6 @@ export default function AdminReports() {
       y += 6;
     };
 
-    
     doc.setFillColor(16,185,129); doc.rect(0, 0, W, 14, 'F');
     doc.setTextColor(255,255,255); doc.setFontSize(14); doc.setFont('helvetica','bold');
     doc.text('FreshMarket — Laporan Sistem', 15, 9);
@@ -285,7 +275,6 @@ export default function AdminReports() {
   return (
     <div className="space-y-8 font-sans max-w-7xl mx-auto text-gray-800 dark:text-gray-100">
 
-      
       {fetchError && (
         <div className="flex items-start gap-4 bg-rose-50 border border-rose-100 dark:border-rose-950/20 text-rose-800 dark:text-rose-450 rounded-2xl px-6 py-4 text-sm font-medium shadow-2xs animate-in fade-in duration-200">
           <AlertTriangle size={20} className="shrink-0 mt-0.5 text-rose-550 dark:text-rose-405" />
@@ -296,7 +285,6 @@ export default function AdminReports() {
         </div>
       )}
 
-      
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2 border-b border-slate-100 dark:border-gray-800">
         <div>
           <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
@@ -313,7 +301,7 @@ export default function AdminReports() {
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          
+
           <button
             onClick={() => isAdmin ? fetchAdmin(startDate, endDate) : fetchKasir()}
             disabled={loading}
@@ -323,7 +311,6 @@ export default function AdminReports() {
             Perbarui Data
           </button>
 
-          
           <button
             onClick={downloadPDF}
             className="flex items-center gap-2 px-4.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all duration-200 active:scale-95 cursor-pointer shadow-sm shadow-emerald-600/20"
@@ -334,14 +321,13 @@ export default function AdminReports() {
         </div>
       </div>
 
-      
       {isAdmin && (
         <>
-          
+
           <div className="bg-white dark:bg-gray-900 border border-slate-100 dark:border-gray-805 rounded-2xl p-6 shadow-2xs flex flex-col gap-5">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider">PINTASAN RENTANG TANGGAL</span>
-              
+
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { id: 'today', label: 'Hari Ini' },
@@ -378,7 +364,7 @@ export default function AdminReports() {
                   className="w-full bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 rounded-xl px-4 py-3 text-xs font-semibold text-slate-700 dark:text-gray-250 focus:outline-none focus:ring-2 focus:ring-emerald-505/20 focus:border-emerald-500 transition-all"
                 />
               </div>
-              
+
               <div className="flex-1 min-w-[200px]">
                 <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2">
                   <Calendar size={12} className="inline mr-1.5 text-emerald-600" />Tanggal Selesai
@@ -402,7 +388,6 @@ export default function AdminReports() {
             </div>
           </div>
 
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <SummaryCard
               icon={TrendingUp}
@@ -430,9 +415,8 @@ export default function AdminReports() {
             />
           </div>
 
-          
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            
+
             <Table
               title="Produk Terlaris"
               subtitle="10 Produk dengan volume penjualan tertinggi"
@@ -452,7 +436,6 @@ export default function AdminReports() {
               ))}
             />
 
-            
             <Table
               title="Performa Voucher"
               subtitle="Analisis penggunaan kode promo diskon"
@@ -475,10 +458,9 @@ export default function AdminReports() {
         </>
       )}
 
-      
       {!isAdmin && (
         <>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <SummaryCard
               icon={TrendingUp}
@@ -499,7 +481,7 @@ export default function AdminReports() {
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            
+
             <div className="bg-white dark:bg-gray-900 border border-slate-100 dark:border-gray-805 rounded-2xl shadow-2xs overflow-hidden flex flex-col h-full">
               <div className="px-6 py-4 border-b border-slate-100 dark:border-gray-800 bg-slate-50/20 dark:bg-gray-950/20 flex items-center gap-3">
                 <div className="p-2 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 rounded-lg">
@@ -510,7 +492,7 @@ export default function AdminReports() {
                   <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 font-medium">Berdasarkan status pemrosesan pesanan</p>
                 </div>
               </div>
-              
+
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div className="space-y-4">
                   {(dailyClose?.ringkasan_status || []).length === 0 ? (
@@ -540,7 +522,6 @@ export default function AdminReports() {
               </div>
             </div>
 
-            
             <Table
               title="Rekapitulasi Metode Transaksi"
               subtitle="Pembagian transaksi hari ini berdasarkan jenis pembayaran"
@@ -557,7 +538,6 @@ export default function AdminReports() {
             />
           </div>
 
-          
           {lowStock.length > 0 && (
             <div className="bg-rose-50/50 dark:bg-rose-955/10 border border-rose-100 dark:border-rose-950/30 rounded-2xl overflow-hidden shadow-2xs animate-in fade-in duration-200">
               <div className="flex items-center gap-3 px-6 py-4 border-b border-rose-105 dark:border-rose-950/20 bg-rose-100/10 dark:bg-rose-955/20">
@@ -586,8 +566,8 @@ export default function AdminReports() {
                         </td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex items-center gap-1.5 font-black text-xs px-2.5 py-1 rounded-lg ${
-                            Number(p.stock) === 0 
-                              ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400' 
+                            Number(p.stock) === 0
+                              ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-400'
                               : 'bg-amber-100 text-amber-800 dark:bg-amber-955/30 dark:text-amber-400'
                           }`}>
                             {p.stock} unit

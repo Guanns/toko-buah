@@ -1,11 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: server.js
- * DESKRIPSI: Berkas utama untuk inisialisasi server Express, konfigurasi
- *            middleware global, dan pemetaan rute API backend FreshMarket.
- * INTEGRASI: Menyediakan endpoint statis untuk upload gambar lokal.
- * ==============================================================================
- */
 
 /* -------------------------------------------------------------------------- */
 /*                          INISIALISASI & DEPENDENSI                         */

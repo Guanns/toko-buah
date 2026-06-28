@@ -1,12 +1,3 @@
-/**
- * ==============================================================================
- * MODUL: orderController.js
- * KELOMPOK: Controller Transaksi & Pemesanan
- * DESKRIPSI: Mengelola alur transaksi belanja pelanggan, penyesuaian stok produk,
- *            serta pelacakan dan perubahan status pesanan.
- * INTEGRASI: Terhubung dengan tabel database orders, order_items, vouchers, dan products.
- * ==============================================================================
- */
 
 const db = require('../config/db');
 const { cleanInput } = require('../middleware/auth');
@@ -14,12 +5,7 @@ const { cleanInput } = require('../middleware/auth');
 /* -------------------------------------------------------------------------- */
 /*                         PROSES CHECKOUT & TRANSAKSI                        */
 /* -------------------------------------------------------------------------- */
-/**
- * Rationale: Menggunakan transaksi database (transaction) agar proses pembuatan pesanan,
- * perekaman item belanja, pengurangan stok produk, dan pengurangan kuota voucher berjalan
- * secara atomik (jika salah satu gagal, seluruh operasi dibatalkan/rollback).
- */
-// function createOrder
+
 const createOrder = (req, res) => {
     const { user_id, total_amount, items, voucher_code, payment_method } = req.body;
     const safePaymentMethod = cleanInput(payment_method || 'qris');
@@ -86,14 +72,14 @@ const createOrder = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                         RIWAYAT PESANAN PELANGGAN                          */
 /* -------------------------------------------------------------------------- */
-// function getUserOrders
+
 const getUserOrders = (req, res) => {
     const userId = req.params.id;
     const query = `
-        SELECT 
-            o.id, 
-            o.created_at as date, 
-            o.status, 
+        SELECT
+            o.id,
+            o.created_at as date,
+            o.status,
             o.total_amount as total,
             (
                 SELECT JSON_ARRAYAGG(JSON_OBJECT('name', p.name, 'qty', oi.quantity, 'price', oi.price))
@@ -114,14 +100,14 @@ const getUserOrders = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                      DAFTAR SEMUA PESANAN (MANAJEMEN)                      */
 /* -------------------------------------------------------------------------- */
-// function getAllOrders
+
 const getAllOrders = (req, res) => {
     const query = `
-        SELECT 
-            o.id, 
+        SELECT
+            o.id,
             u.name as customer_name,
-            o.created_at, 
-            o.status, 
+            o.created_at,
+            o.status,
             o.total_amount,
             o.shipping_address,
             o.phone_number,
@@ -144,7 +130,7 @@ const getAllOrders = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                     KONFIRMASI PENYELESAIAN PESANAN                        */
 /* -------------------------------------------------------------------------- */
-// function completeOrder
+
 const completeOrder = (req, res) => {
     const orderId = req.params.id;
     db.query("UPDATE orders SET status = 'SELESAI' WHERE id = ?", [orderId], (err) => {
@@ -156,7 +142,7 @@ const completeOrder = (req, res) => {
 /* -------------------------------------------------------------------------- */
 /*                           UPDATE STATUS PESANAN                            */
 /* -------------------------------------------------------------------------- */
-// function updateOrderStatus
+
 const updateOrderStatus = (req, res) => {
     const orderId = req.params.id;
     const { status } = req.body;

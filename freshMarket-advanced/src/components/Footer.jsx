@@ -1,19 +1,12 @@
-/**
- * ==============================================================================
- * MODUL: Footer.jsx
- * KELOMPOK: Komponen UI
- * DESKRIPSI: Komponen antarmuka pengguna untuk Footer FreshMarket yang estetis.
- * ==============================================================================
- */
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
-import { 
-  Leaf, 
-  MapPin, 
-  Phone, 
-  Mail, 
+import {
+  Leaf,
+  MapPin,
+  Phone,
+  Mail,
   ArrowRight,
   Clock
 } from "lucide-react";
@@ -34,11 +27,10 @@ const Footer = () => {
 
   return (
     <footer className="bg-white dark:bg-gray-950 border-t border-slate-100 dark:border-slate-900 mt-28 transition-colors duration-300">
-      {/* Top Banner - Subtle & Modern */}
+
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-slate-100 dark:border-slate-900">
-          
-          {/* Brand Info */}
+
           <div className="lg:col-span-4 space-y-6">
             <div className="flex items-center gap-2 text-2xl font-bold tracking-tight">
               <div className="bg-emerald-500/10 p-2 rounded-xl text-emerald-600 dark:text-emerald-400">
@@ -48,12 +40,11 @@ const Footer = () => {
                 Fresh<span className="text-emerald-500 font-bold">market</span>
               </span>
             </div>
-            
+
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-sm font-medium">
               Menyajikan kesegaran terbaik dari alam langsung ke meja makan Anda. Buah segar pilihan untuk gaya hidup sehat keluarga Indonesia.
             </p>
 
-            {/* Social Media Links */}
             <div className="flex items-center gap-3.5">
               <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 dark:bg-slate-900 dark:hover:bg-emerald-950/50 dark:hover:text-emerald-400 transition-all duration-300 shadow-sm" aria-label="Instagram">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
@@ -75,7 +66,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-450 dark:text-slate-500 font-headline">Belanja</h4>
             <ul className="space-y-3 text-sm font-medium">
@@ -94,7 +84,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Company Links */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-450 dark:text-slate-500 font-headline">Dukungan</h4>
             <ul className="space-y-3 text-sm font-medium">
@@ -113,7 +102,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Location & Maps - Modern Card Layout */}
           <div className="lg:col-span-4">
             <div className="bg-slate-50/50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-900/60 rounded-3xl p-6 space-y-5 shadow-sm backdrop-blur-sm">
               <div className="flex items-center gap-2">
@@ -125,7 +113,7 @@ const Footer = () => {
 
               <div className="space-y-2.5 text-xs font-medium text-slate-500 dark:text-slate-450 leading-relaxed">
                 <p className="flex items-start gap-2">
-                  <span className="font-semibold text-slate-850 dark:text-slate-200">Alamat:</span> 
+                  <span className="font-semibold text-slate-850 dark:text-slate-200">Alamat:</span>
                   <span>Kecamatan Bontang Utara, Kota Bontang, Kalimantan Timur</span>
                 </p>
                 <p className="flex items-center gap-2">
@@ -138,9 +126,9 @@ const Footer = () => {
                 </p>
               </div>
 
-              <a 
-                href="https://maps.google.com" 
-                target="_blank" 
+              <a
+                href="https://maps.google.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-2xl text-xs transition-all duration-300 shadow-sm active:scale-[0.98]"
               >
@@ -151,7 +139,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-medium text-slate-400 dark:text-slate-500">
           <p className="order-2 md:order-1">
             &copy; {new Date().getFullYear()} Freshmarket. Seluruh hak cipta dilindungi undang-undang.

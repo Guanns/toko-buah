@@ -10,12 +10,12 @@ import { Link } from 'react-router-dom';
 /* -------------------------------------------------------------------------- */
 /*                           KOMPONEN UTAMA / LOGIKA                          */
 /* -------------------------------------------------------------------------- */
-// function Tracking
+
 const Tracking = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('ALL');
   const [expandedOrders, setExpandedOrders] = useState({});
   const [confirmModal, setConfirmModal] = useState({
@@ -39,7 +39,7 @@ const Tracking = () => {
     try {
       const res = await fetch(`http://localhost:5000/api/orders/user/${user.id}`);
       const data = await res.json();
-      
+
       if (Array.isArray(data)) {
           setOrders(data);
       } else {
@@ -48,7 +48,7 @@ const Tracking = () => {
     } catch (err) {
       setOrders([]);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -87,26 +87,25 @@ const Tracking = () => {
 
   const getStatusConfig = (status) => {
     switch(status) {
-      case 'MENUNGGU_ADMIN': 
+      case 'MENUNGGU_ADMIN':
         return { label: 'Menunggu', color: 'text-amber-700 bg-amber-50/70 border-amber-200/50', barColor: 'bg-amber-400', step: 1, icon: Clock };
-      case 'DIPROSES': 
+      case 'DIPROSES':
         return { label: 'Diproses', color: 'text-blue-700 bg-blue-50/70 border-blue-200/50', barColor: 'bg-blue-500', step: 2, icon: Package };
-      case 'DIKIRIM': 
+      case 'DIKIRIM':
         return { label: 'Dikirim', color: 'text-indigo-700 bg-indigo-50/70 border-indigo-200/50', barColor: 'bg-indigo-500', step: 3, icon: Truck };
-      case 'SELESAI': 
+      case 'SELESAI':
         return { label: 'Selesai', color: 'text-emerald-700 bg-emerald-50/70 border-emerald-200/50', barColor: 'bg-emerald-500', step: 4, icon: CheckCircle2 };
-      default: 
+      default:
         return { label: 'Unknown', color: 'text-gray-700 bg-gray-50/70 border-gray-200/50', barColor: 'bg-gray-400', step: 0, icon: Package };
     }
   };
 
   const safeParseItems = (items) => {
       if (!items) return [];
-      if (Array.isArray(items)) return items; 
+      if (Array.isArray(items)) return items;
       try { return JSON.parse(items); } catch(e) { return []; }
   };
 
-  
   const totalSpent = orders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
   const activeOrdersCount = orders.filter(order => order.status !== 'SELESAI').length;
   const completedOrdersCount = orders.filter(order => order.status === 'SELESAI').length;
@@ -140,13 +139,12 @@ const Tracking = () => {
     return (
       <div className="min-h-screen bg-gray-50 pt-28 pb-20 px-4 md:px-8 font-sans text-gray-800">
         <div className="max-w-7xl mx-auto">
-          
+
           <div className="mb-8 space-y-2 animate-pulse">
             <div className="h-8 w-48 bg-gray-250 rounded-lg"></div>
             <div className="h-4 w-80 bg-gray-200 rounded-lg"></div>
           </div>
-          
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             {[1, 2, 3].map(i => (
               <div key={i} className="bg-white border border-gray-200 rounded-2xl p-5 flex items-center gap-4 animate-pulse">
@@ -159,7 +157,6 @@ const Tracking = () => {
             ))}
           </div>
 
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map(i => (
               <div key={i} className="bg-white rounded-2xl p-5 border border-gray-200 space-y-4 animate-pulse">
@@ -198,8 +195,7 @@ const Tracking = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-28 pb-20 px-4 md:px-8 font-sans text-gray-800">
       <div className="max-w-7xl mx-auto">
-        
-        
+
         <div className="mb-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -212,7 +208,6 @@ const Tracking = () => {
           </div>
         </div>
 
-        
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
           <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-xs flex items-center gap-4 transition-all duration-300 hover:shadow-sm">
             <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
@@ -223,7 +218,7 @@ const Tracking = () => {
               <h3 className="text-xl font-bold text-slate-800 mt-0.5">Rp {totalSpent.toLocaleString('id-ID')}</h3>
             </div>
           </div>
-          
+
           <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-xs flex items-center gap-4 transition-all duration-300 hover:shadow-sm">
             <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
               <Truck size={20} />
@@ -245,7 +240,6 @@ const Tracking = () => {
           </div>
         </div>
 
-        
         <div className="flex border-b border-slate-200 mb-8 overflow-x-auto gap-2">
           {tabs.map((tab) => (
             <button
@@ -267,7 +261,6 @@ const Tracking = () => {
           ))}
         </div>
 
-        
         {filteredOrders.length === 0 ? (
           <div className="bg-white border border-slate-200/65 rounded-2xl p-12 text-center shadow-xs">
             <ShoppingBag className="mx-auto text-gray-300 mb-4 animate-pulse" size={40} />
@@ -279,7 +272,7 @@ const Tracking = () => {
             {filteredOrders.map((order) => {
               const statusConfig = getStatusConfig(order.status);
               const itemsList = safeParseItems(order.items);
-              const totalAmount = order.total || 0; 
+              const totalAmount = order.total || 0;
               const StatusIcon = statusConfig.icon;
 
               const steps = [
@@ -291,8 +284,7 @@ const Tracking = () => {
 
               return (
                 <div key={order.id} className="bg-white rounded-2xl border border-slate-200/60 shadow-xs hover:shadow-md hover:border-emerald-250 transition-all duration-300 flex flex-col h-full overflow-hidden">
-                  
-                  
+
                   <div className="p-5 border-b border-slate-100 bg-slate-50/40">
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex items-center gap-2">
@@ -304,31 +296,28 @@ const Tracking = () => {
                           </p>
                         </div>
                       </div>
-                      
-                      
+
                       <span className={`px-2.5 py-1 rounded-md text-[10px] font-semibold border flex items-center gap-1.5 ${statusConfig.color}`}>
                         <StatusIcon size={11} />
                         {statusConfig.label}
                       </span>
                     </div>
 
-                    
                     <div className="relative flex items-center justify-between w-full mt-5 mb-1 px-1">
-                      
+
                       <div className="absolute left-0 right-0 top-3 h-0.5 bg-slate-100 z-0">
-                        <div 
-                          className="h-full bg-emerald-500 transition-all duration-500" 
+                        <div
+                          className="h-full bg-emerald-500 transition-all duration-500"
                           style={{ width: `${statusConfig.step === 4 ? 100 : statusConfig.step === 3 ? 66.6 : statusConfig.step === 2 ? 33.3 : 0}%` }}
                         />
                       </div>
-                      
-                      
+
                       {steps.map((s, idx) => {
                         const stepNum = idx + 1;
                         const isCompleted = statusConfig.step === 4 || stepNum < statusConfig.step;
                         const isActive = statusConfig.step !== 4 && stepNum === statusConfig.step;
                         const isCurrent = stepNum === statusConfig.step;
-                        
+
                         return (
                           <div key={idx} className="flex flex-col items-center relative z-10 bg-white px-1 select-none">
                             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-semibold transition-all duration-300 ${
@@ -349,9 +338,8 @@ const Tracking = () => {
                     </div>
                   </div>
 
-                  
                   <div className="p-5 flex-1 flex flex-col space-y-4">
-                    
+
                     {!expandedOrders[order.id] && (
                       <div className="flex items-center justify-between gap-2 py-1.5 border border-slate-100 rounded-xl px-3 bg-slate-50/50">
                         <div className="flex items-center gap-2 truncate">
@@ -374,7 +362,6 @@ const Tracking = () => {
                       </div>
                     )}
 
-                    
                     {expandedOrders[order.id] && (
                       <div className="space-y-2 animate-in fade-in duration-200">
                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
@@ -399,8 +386,7 @@ const Tracking = () => {
                       </div>
                     )}
 
-                    
-                    <button 
+                    <button
                       onClick={() => toggleOrderExpand(order.id)}
                       className="w-full flex items-center justify-between py-1 text-xs font-semibold text-slate-400 hover:text-emerald-600 transition-colors mt-1"
                     >
@@ -409,16 +395,15 @@ const Tracking = () => {
                     </button>
                   </div>
 
-                  
                   <div className="p-5 border-t border-slate-100 flex items-center justify-between gap-3 mt-auto bg-slate-50/15">
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Belanja</p>
                       <p className="text-base font-bold text-emerald-600">Rp {Number(totalAmount).toLocaleString('id-ID')}</p>
                     </div>
-                    
+
                     {order.status === 'DIKIRIM' ? (
-                      <button 
-                        onClick={() => handleSelesaikanPesanan(order.id)} 
+                      <button
+                        onClick={() => handleSelesaikanPesanan(order.id)}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4.5 py-2 rounded-xl transition-all hover:shadow-sm active:scale-95 flex items-center gap-1.5"
                       >
                         Selesaikan Pesanan <ChevronRight size={13} />
@@ -439,14 +424,13 @@ const Tracking = () => {
         )}
       </div>
 
-      
       {confirmModal.isOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="bg-white w-full max-w-sm rounded-2xl shadow-xl border border-slate-100 overflow-hidden p-6 animate-in zoom-in-95 duration-200">
             <div className="flex flex-col items-center text-center">
               <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 border ${
-                confirmModal.confirmType === 'success' 
-                  ? 'bg-emerald-50 text-emerald-600 border-emerald-100/50' 
+                confirmModal.confirmType === 'success'
+                  ? 'bg-emerald-50 text-emerald-600 border-emerald-100/50'
                   : 'bg-rose-50 text-rose-500 border-rose-100/50'
               }`}>
                 {confirmModal.confirmType === 'success' ? (
@@ -455,20 +439,20 @@ const Tracking = () => {
                   <AlertTriangle size={24} />
                 )}
               </div>
-              
+
               <h3 className="text-sm font-semibold text-slate-800 mb-1.5">{confirmModal.title}</h3>
               <p className="text-xs text-slate-550 font-medium leading-relaxed mb-6">
                 {confirmModal.message}
               </p>
-              
+
               <div className="flex gap-3 w-full">
-                <button 
+                <button
                   onClick={closeConfirm}
                   className="flex-1 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 font-semibold text-xs rounded-xl transition-all"
                 >
                   Batal
                 </button>
-                <button 
+                <button
                   onClick={confirmModal.onConfirm}
                   className={`flex-1 py-2.5 text-white font-semibold text-xs rounded-xl transition-all shadow-sm active:scale-95 ${
                     confirmModal.confirmType === 'success'
